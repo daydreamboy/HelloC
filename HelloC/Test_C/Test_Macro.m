@@ -25,9 +25,12 @@
         size_t len2 = strlen("abcdefghijkl");
         assert(len == len2);
         for (NSInteger i = 0; i < len; ++i) {
-            printf("%0hhX ", cString[i]);
+            printf("%02X ", cString[i]);
         }
         printf("\n");
+        
+        // Note: the encrpted string can be displayed on console
+        NSLog(@"nsstring: %@\n", [NSString stringWithUTF8String:cString]);
 
         char decrptedString[] = WCDecryptedCString(cString);
         printf("%s\n", decrptedString);

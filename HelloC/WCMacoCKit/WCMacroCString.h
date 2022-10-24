@@ -8,15 +8,34 @@
 #ifndef WCMacroCString_h
 #define WCMacroCString_h
 
-// @see https://stackoverflow.com/questions/4102320/how-to-encrypt-strings-at-compile-time/4102533#4102533
-// @see https://stackoverflow.com/questions/7270473/compile-time-string-encryption
-
-#define WCEncryptedCString(literalCString_) WCXORCString30_(literalCString_)
-#define WCDecryptedCString(encryptedCStringVar_) { WCXORCString_(encryptedCStringVar_) }
+#pragma mark - Literal C String Encrption
 
 /**
- @param cStr, which maximum length is 30
+ Encrypt literal C string on complie-time
+ 
+ @param literalCString_ the literal C string which should not seen in binray file as a string symbol,
+ and literalCString_'s length only allowed to <= 30
+ 
+ @return the char array which can be assigned to the char[] variable, should not char * variable
+ 
+ @warning the literalCString_ length must not be > 30
+ 
+ @see https://stackoverflow.com/questions/4102320/how-to-encrypt-strings-at-compile-time/4102533#4102533
+ @see https://stackoverflow.com/questions/7270473/compile-time-string-encryption
  */
+#define WCEncryptedCString(literalCString_) WCXORCString30_(literalCString_)
+/**
+ Decrypt the obfuscated C string on runtime
+ 
+ @param encryptedCStringVar_ the char[] variable
+ 
+ @return the plain C char array
+ 
+ @warning This macro must be used in pair with WCEncryptedCString, and must be in the same source file (.m/.c, etc.)
+ */
+#define WCDecryptedCString(encryptedCStringVar_) { WCXORCString_(encryptedCStringVar_) }
+
+
 #define WCXORCString30_(cStr) { \
 WCXORCString_(cStr "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0") \
 }

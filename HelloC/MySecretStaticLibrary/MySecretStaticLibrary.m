@@ -27,7 +27,7 @@
         size_t len2 = strlen("abcdefghijkl");
         assert(len == len2);
         for (NSInteger i = 0; i < len; ++i) {
-            printf("%hhX ", cString[i]);
+            printf("%02X ", cString[i]);
         }
         printf("\n");
 
