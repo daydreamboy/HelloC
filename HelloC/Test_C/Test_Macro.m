@@ -16,27 +16,15 @@
 @implementation Test_Macro
 
 - (void)test_WCEncryptedCString {
-    printf("%s\n", __TIME__);
+    char enc[] = WCEncryptedCString("hello world!", 12);
+    char dec[] = WCDecryptedCString(enc, 12);
     
-    {
-        char cString[] = WCEncryptedCString("hello world!");
-        size_t len = strlen(cString);
-        //                   "hello world!"
-        size_t len2 = strlen("abcdefghijkl");
-        assert(len == len2);
-        for (NSInteger i = 0; i < len; ++i) {
-            printf("%02X ", cString[i]);
-        }
-        printf("\n");
-        
-        // Note: the encrpted string can be displayed on console
-        NSLog(@"nsstring: %@\n", [NSString stringWithUTF8String:cString]);
-
-        char decrptedString[] = WCDecryptedCString(cString);
-        printf("%s\n", decrptedString);
-        //XCTAssertTrue(strcmp("hello world!", decrptedString) == 0);
+    for (NSInteger i = 0; i < strlen(dec); ++i) {
+        XCTAssertTrue("hello world!"[i] == dec[i]);
     }
-    
+}
+
+- (void)test_use_in_library {
     {
         MySecretStaticLibrary *object = [MySecretStaticLibrary new];
         [object doSomething];

@@ -21,7 +21,7 @@
     printf("%s\n", __TIME__);
     
     {
-        char cString[] = WCEncryptedCString("hello world!");
+        char cString[] = WCEncryptedCString("hello world!", 12);
         size_t len = strlen(cString);
         //                   "hello world!"
         size_t len2 = strlen("abcdefghijkl");
@@ -31,7 +31,7 @@
         }
         printf("\n");
 
-        char dec[] = WCDecryptedCString(cString);
+        char dec[] = WCDecryptedCString(cString, 12);
         printf("%s\n", dec);
     }
 }

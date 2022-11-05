@@ -8,7 +8,7 @@
 #ifndef WCMacroCString_h
 #define WCMacroCString_h
 
-#pragma mark - Literal C String Encrption
+#pragma mark - Literal C String Encryption
 
 /**
  Encrypt literal C string on complie-time
@@ -23,7 +23,7 @@
  @see https://stackoverflow.com/questions/4102320/how-to-encrypt-strings-at-compile-time/4102533#4102533
  @see https://stackoverflow.com/questions/7270473/compile-time-string-encryption
  */
-#define WCEncryptedCString(literalCString_) WCXORCString30_(literalCString_)
+#define WCEncryptedCString(literalCString_, len_) { WCXORCString##len_(literalCString_) }
 /**
  Decrypt the obfuscated C string on runtime
  
@@ -33,14 +33,88 @@
  
  @warning This macro must be used in pair with WCEncryptedCString, and must be in the same source file (.m/.c, etc.)
  */
-#define WCDecryptedCString(encryptedCStringVar_) { WCXORCString_(encryptedCStringVar_) }
+#define WCDecryptedCString(encryptedCStringVar_, len_) { WCXORCString##len_(encryptedCStringVar_) }
 
 
-#define WCXORCString30_(cStr) { \
-WCXORCString_(cStr "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0") \
-}
+#define WCXORCString6(cStr) \
+WCXORChar2_((cStr)[0], 0), \
+WCXORChar2_((cStr)[1], 1), \
+WCXORChar2_((cStr)[2], 2), \
+WCXORChar2_((cStr)[3], 3), \
+WCXORChar2_((cStr)[4], 4), \
+WCXORChar2_((cStr)[5], 5), \
+'\0'
 
-#define WCXORCString_(cStr) \
+#define WCXORCString12(cStr) \
+WCXORChar2_((cStr)[0], 0), \
+WCXORChar2_((cStr)[1], 1), \
+WCXORChar2_((cStr)[2], 2), \
+WCXORChar2_((cStr)[3], 3), \
+WCXORChar2_((cStr)[4], 4), \
+WCXORChar2_((cStr)[5], 5), \
+WCXORChar2_((cStr)[6], 6), \
+WCXORChar2_((cStr)[7], 7), \
+WCXORChar2_((cStr)[8], 8), \
+WCXORChar2_((cStr)[9], 9), \
+WCXORChar2_((cStr)[10], 10), \
+WCXORChar2_((cStr)[11], 11), \
+'\0'
+
+#define WCXORCString19(cStr) \
+WCXORChar2_((cStr)[0], 0), \
+WCXORChar2_((cStr)[1], 1), \
+WCXORChar2_((cStr)[2], 2), \
+WCXORChar2_((cStr)[3], 3), \
+WCXORChar2_((cStr)[4], 4), \
+WCXORChar2_((cStr)[5], 5), \
+WCXORChar2_((cStr)[6], 6), \
+WCXORChar2_((cStr)[7], 7), \
+WCXORChar2_((cStr)[8], 8), \
+WCXORChar2_((cStr)[9], 9), \
+WCXORChar2_((cStr)[10], 10), \
+WCXORChar2_((cStr)[11], 11), \
+WCXORChar2_((cStr)[12], 12), \
+WCXORChar2_((cStr)[13], 13), \
+WCXORChar2_((cStr)[14], 14), \
+WCXORChar2_((cStr)[15], 15), \
+WCXORChar2_((cStr)[16], 16), \
+WCXORChar2_((cStr)[17], 17), \
+WCXORChar2_((cStr)[18], 18), \
+'\0'
+
+#define WCXORCString29(cStr) \
+WCXORChar2_((cStr)[0], 0), \
+WCXORChar2_((cStr)[1], 1), \
+WCXORChar2_((cStr)[2], 2), \
+WCXORChar2_((cStr)[3], 3), \
+WCXORChar2_((cStr)[4], 4), \
+WCXORChar2_((cStr)[5], 5), \
+WCXORChar2_((cStr)[6], 6), \
+WCXORChar2_((cStr)[7], 7), \
+WCXORChar2_((cStr)[8], 8), \
+WCXORChar2_((cStr)[9], 9), \
+WCXORChar2_((cStr)[10], 10), \
+WCXORChar2_((cStr)[11], 11), \
+WCXORChar2_((cStr)[12], 12), \
+WCXORChar2_((cStr)[13], 13), \
+WCXORChar2_((cStr)[14], 14), \
+WCXORChar2_((cStr)[15], 15), \
+WCXORChar2_((cStr)[16], 16), \
+WCXORChar2_((cStr)[17], 17), \
+WCXORChar2_((cStr)[18], 18), \
+WCXORChar2_((cStr)[19], 19), \
+WCXORChar2_((cStr)[20], 20), \
+WCXORChar2_((cStr)[21], 21), \
+WCXORChar2_((cStr)[22], 22), \
+WCXORChar2_((cStr)[23], 23), \
+WCXORChar2_((cStr)[24], 24), \
+WCXORChar2_((cStr)[25], 25), \
+WCXORChar2_((cStr)[26], 26), \
+WCXORChar2_((cStr)[27], 27), \
+WCXORChar2_((cStr)[28], 28), \
+'\0'
+
+#define WCXORCString30(cStr) \
 WCXORChar2_((cStr)[0], 0), \
 WCXORChar2_((cStr)[1], 1), \
 WCXORChar2_((cStr)[2], 2), \
