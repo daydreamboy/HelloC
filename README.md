@@ -53,7 +53,8 @@ C提供下面几种函数，用于动态分配内存[^2]
 
 说明
 
-> 在Terminal中使用man malloc可以查询上面函数的文档
+> 1. 在Terminal中使用man malloc可以查询上面函数的文档
+> 2. HelloMalloc工程中，可以查看这几个函数的用法
 
 
 
@@ -225,6 +226,89 @@ void * realloc(void *ptr, size_t size);
 >    realloc函数返回的指针有可能和原始指针一样，也可能不一样，总是要采用realloc函数返回的指针。
 >
 > 2. realloc函数不保证重新分配的内存都初始化为0
+
+
+
+## 4、pthread
+
+pthread相关函数
+
+| 函数                | 作用                         |
+| ------------------- | ---------------------------- |
+| pthread_create      |                              |
+| pthread_getspecific |                              |
+| pthread_join        | 挂起调用线程，直至target结束 |
+| pthread_key_create  |                              |
+| pthread_setspecific |                              |
+
+说明
+
+> 按照字母顺序
+
+
+
+```c
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);
+```
+
+
+
+### (1) pthread_create
+
+pthread_create函数的签名，如下
+
+```c
+int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);
+```
+
+* thread参数。pthread_t的指针
+* pthread_attr_t参数。pthread_t的属性。传入NULL，则使用默认属性
+* start_routine参数。线程的入口函数
+* arg参数。该参数是传入线程的入口函数的参数。
+
+返回值是0，表示该函数创建线程成功。
+
+举个例子，如下
+
+```objective-c
+void * thread_entry_point(void *arg)
+{
+    NSLog(@"thread started with arg pointer: %p", arg);
+    
+    // Note: if you're sure that arg is some NSObject, it's safe to convert it to NSObejct
+    // Note: use CFBridgingRelease to tell compiler should release arg
+    NSObject *object = CFBridgingRelease(arg);
+    NSLog(@"actual arg: %@", object);
+    
+    return NULL;
+}
+
+- (void)test_pthread_create {
+    pthread_t thread;
+    // Note: use alloc to create a NSString object which will be release, instead of use literal NSString which allocated memory controlled ObjC runtime
+    NSString *param = [[NSString alloc] initWithFormat:@"%@", @"This is a param"];
+    
+    // Note: after pthread exit, in LLDB to print the pointer address, see it will not be the NSString
+    NSLog(@"param: %p", param);
+    // Note: use CFBridgingRetain to tell compiler param will be retained
+    int status = pthread_create(&thread, NULL, thread_entry_point, (void *)CFBridgingRetain(param));
+    if (status == 0) {
+        NSLog(@"Create pthread successfully");
+    }
+}
+```
+
+
+
+
+
+### (2) pthread_getspecific
+
+```c
+void *pthread_getspecific(pthread_key_t key);
+```
+
+
 
 
 
