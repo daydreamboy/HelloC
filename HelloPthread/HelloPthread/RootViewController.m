@@ -10,7 +10,7 @@
 
 #import "CreatePthreadViewController.h"
 #import "CreatePthreadSpecificDataViewController.h"
-#import "CreateThreadSpecificDataViewController.h"
+#import "CreateThreadKeyWithGCDThreadViewController.h"
 
 @interface RootViewController ()
 @property (nonatomic, strong) NSArray *titles;
@@ -35,11 +35,13 @@
     _titles = @[
         @"Create pthread",
         @"Create pthread specific data",
+        @"thread_create_key with GCD thread",
         @"call a test method",
     ];
     _classes = @[
         [CreatePthreadViewController class],
         [CreatePthreadSpecificDataViewController class],
+        [CreateThreadKeyWithGCDThreadViewController class],
         @"testMethod",
     ];
 }

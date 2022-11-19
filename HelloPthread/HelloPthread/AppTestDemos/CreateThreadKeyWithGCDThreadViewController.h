@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CreateThreadSpecificDataViewController : UIViewController
+@interface CreateThreadKeyWithGCDThreadViewController : UIViewController
 
 
 @end

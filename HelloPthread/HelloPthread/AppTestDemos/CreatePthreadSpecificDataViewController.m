@@ -19,7 +19,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    //[self test_pthread];
+    [self test_pthread_key_create];
 }
 
 #pragma mark -
@@ -77,7 +77,7 @@ void destr_fn(void *parm)
 }
 
 
-- (void)test_pthread_create {
+- (void)test_pthread_key_create {
     int status;
     int i;
     int thread_params[NUM_OF_THREAD];
