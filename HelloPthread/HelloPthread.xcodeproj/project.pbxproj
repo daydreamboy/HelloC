@@ -14,7 +14,7 @@
 		4F20753C29290FE000327A19 /* Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F20753B29290FE000327A19 /* Test.m */; };
 		4F20754E2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F20754A2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.m */; };
 		4F20754F2929141B00327A19 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F20754C2929141B00327A19 /* RootViewController.m */; };
-		4F20755229291D5500327A19 /* CreatePthreadSpecificDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F20755129291D5500327A19 /* CreatePthreadSpecificDataViewController.m */; };
+		4F20755229291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F20755129291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m */; };
 		4F2075552929230900327A19 /* CreatePthreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2075542929230900327A19 /* CreatePthreadViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -42,8 +42,8 @@
 		4F20754B2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateThreadKeyWithGCDThreadViewController.h; sourceTree = "<group>"; };
 		4F20754C2929141B00327A19 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		4F20754D2929141B00327A19 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
-		4F20755029291D5500327A19 /* CreatePthreadSpecificDataViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreatePthreadSpecificDataViewController.h; sourceTree = "<group>"; };
-		4F20755129291D5500327A19 /* CreatePthreadSpecificDataViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreatePthreadSpecificDataViewController.m; sourceTree = "<group>"; };
+		4F20755029291D5500327A19 /* CreateThreadKeyWithPthreadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateThreadKeyWithPthreadViewController.h; sourceTree = "<group>"; };
+		4F20755129291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateThreadKeyWithPthreadViewController.m; sourceTree = "<group>"; };
 		4F2075532929230900327A19 /* CreatePthreadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreatePthreadViewController.h; sourceTree = "<group>"; };
 		4F2075542929230900327A19 /* CreatePthreadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreatePthreadViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -113,10 +113,10 @@
 			children = (
 				4F2075532929230900327A19 /* CreatePthreadViewController.h */,
 				4F2075542929230900327A19 /* CreatePthreadViewController.m */,
+				4F20755029291D5500327A19 /* CreateThreadKeyWithPthreadViewController.h */,
+				4F20755129291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m */,
 				4F20754B2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.h */,
 				4F20754A2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.m */,
-				4F20755029291D5500327A19 /* CreatePthreadSpecificDataViewController.h */,
-				4F20755129291D5500327A19 /* CreatePthreadSpecificDataViewController.m */,
 			);
 			path = AppTestDemos;
 			sourceTree = "<group>";
@@ -222,7 +222,7 @@
 			files = (
 				4F20751E29290F9B00327A19 /* AppDelegate.m in Sources */,
 				4F20754E2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.m in Sources */,
-				4F20755229291D5500327A19 /* CreatePthreadSpecificDataViewController.m in Sources */,
+				4F20755229291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m in Sources */,
 				4F2075552929230900327A19 /* CreatePthreadViewController.m in Sources */,
 				4F20754F2929141B00327A19 /* RootViewController.m in Sources */,
 				4F20752F29290F9E00327A19 /* main.m in Sources */,

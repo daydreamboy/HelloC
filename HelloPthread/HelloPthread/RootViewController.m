@@ -9,7 +9,7 @@
 #import "RootViewController.h"
 
 #import "CreatePthreadViewController.h"
-#import "CreatePthreadSpecificDataViewController.h"
+#import "CreateThreadKeyWithPthreadViewController.h"
 #import "CreateThreadKeyWithGCDThreadViewController.h"
 
 @interface RootViewController ()
@@ -34,13 +34,13 @@
     // MARK: Configure titles and classes for table view
     _titles = @[
         @"Create pthread",
-        @"Create pthread specific data",
+        @"thread_create_key with pthread",
         @"thread_create_key with GCD thread",
         @"call a test method",
     ];
     _classes = @[
         [CreatePthreadViewController class],
-        [CreatePthreadSpecificDataViewController class],
+        [CreateThreadKeyWithPthreadViewController class],
         [CreateThreadKeyWithGCDThreadViewController class],
         @"testMethod",
     ];
