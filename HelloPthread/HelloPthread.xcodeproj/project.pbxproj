@@ -16,6 +16,8 @@
 		4F20754F2929141B00327A19 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F20754C2929141B00327A19 /* RootViewController.m */; };
 		4F20755229291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F20755129291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m */; };
 		4F2075552929230900327A19 /* CreatePthreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F2075542929230900327A19 /* CreatePthreadViewController.m */; };
+		4F3C761C292A2010001FC8FE /* CreateMultipleThreadKeyWithPthreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3C761B292A2010001FC8FE /* CreateMultipleThreadKeyWithPthreadViewController.m */; };
+		4F3C761F292A268B001FC8FE /* CreateThreadKeyWithNSThreadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3C761E292A268B001FC8FE /* CreateThreadKeyWithNSThreadViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,10 @@
 		4F20755129291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateThreadKeyWithPthreadViewController.m; sourceTree = "<group>"; };
 		4F2075532929230900327A19 /* CreatePthreadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreatePthreadViewController.h; sourceTree = "<group>"; };
 		4F2075542929230900327A19 /* CreatePthreadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreatePthreadViewController.m; sourceTree = "<group>"; };
+		4F3C761A292A2010001FC8FE /* CreateMultipleThreadKeyWithPthreadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateMultipleThreadKeyWithPthreadViewController.h; sourceTree = "<group>"; };
+		4F3C761B292A2010001FC8FE /* CreateMultipleThreadKeyWithPthreadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateMultipleThreadKeyWithPthreadViewController.m; sourceTree = "<group>"; };
+		4F3C761D292A268B001FC8FE /* CreateThreadKeyWithNSThreadViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreateThreadKeyWithNSThreadViewController.h; sourceTree = "<group>"; };
+		4F3C761E292A268B001FC8FE /* CreateThreadKeyWithNSThreadViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreateThreadKeyWithNSThreadViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +123,10 @@
 				4F20755129291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m */,
 				4F20754B2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.h */,
 				4F20754A2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.m */,
+				4F3C761D292A268B001FC8FE /* CreateThreadKeyWithNSThreadViewController.h */,
+				4F3C761E292A268B001FC8FE /* CreateThreadKeyWithNSThreadViewController.m */,
+				4F3C761A292A2010001FC8FE /* CreateMultipleThreadKeyWithPthreadViewController.h */,
+				4F3C761B292A2010001FC8FE /* CreateMultipleThreadKeyWithPthreadViewController.m */,
 			);
 			path = AppTestDemos;
 			sourceTree = "<group>";
@@ -220,12 +230,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F3C761C292A2010001FC8FE /* CreateMultipleThreadKeyWithPthreadViewController.m in Sources */,
 				4F20751E29290F9B00327A19 /* AppDelegate.m in Sources */,
 				4F20754E2929141B00327A19 /* CreateThreadKeyWithGCDThreadViewController.m in Sources */,
 				4F20755229291D5500327A19 /* CreateThreadKeyWithPthreadViewController.m in Sources */,
 				4F2075552929230900327A19 /* CreatePthreadViewController.m in Sources */,
 				4F20754F2929141B00327A19 /* RootViewController.m in Sources */,
 				4F20752F29290F9E00327A19 /* main.m in Sources */,
+				4F3C761F292A268B001FC8FE /* CreateThreadKeyWithNSThreadViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

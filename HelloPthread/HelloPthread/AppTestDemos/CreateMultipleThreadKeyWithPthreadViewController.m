@@ -1,19 +1,18 @@
 //
-//  CreatePthreadSpecificDataViewController.m
+//  CreateMultipleThreadKeyWithPthreadViewController.m
 //  HelloPthread
 //
-//  Created by wesley_chen on 2022/11/19.
+//  Created by wesley_chen on 2022/11/20.
 //
 
-#import "CreateThreadKeyWithPthreadViewController.h"
+#import "CreateMultipleThreadKeyWithPthreadViewController.h"
 #include <pthread.h>
 
-// Example code from https://www.ibm.com/docs/en/zos/2.1.0?topic=lf-pthread-key-create-create-thread-specific-data-key
-@interface CreateThreadKeyWithPthreadViewController ()
+@interface CreateMultipleThreadKeyWithPthreadViewController ()
 
 @end
 
-@implementation CreateThreadKeyWithPthreadViewController
+@implementation CreateMultipleThreadKeyWithPthreadViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -22,17 +21,20 @@
     [self test_pthread_key_create];
 }
 
+
 #pragma mark -
 
-#define NUM_OF_THREAD 3
-#define BUFFSIZE  1
+#define NUM_OF_THREAD 1
+#define BUFFSIZE  2
 static pthread_key_t   key;
+static pthread_key_t   key2;
 
 static void *thread_entry_func(void *parm)
 {
     int status;
     int threadNumber;
     void *value;
+    void *value2;
     void *getvalue;
     int buffer[BUFFSIZE];
 
@@ -46,6 +48,7 @@ static void *thread_entry_func(void *parm)
     
     int *bufferPtr = (int *)value;
     bufferPtr[0] = threadNumber;
+    bufferPtr[1] = 1; // indicates the key1
     
     status = pthread_setspecific(key, (void *)value);
     if (status < 0) {
@@ -65,6 +68,22 @@ static void *thread_entry_func(void *parm)
         printf("getvalue not valid, getvalue=%p", getvalue);
         pthread_exit((void *)68);
     }
+    
+    // Note: use key2 to set more thread-specific data
+    if (!(value2 = malloc(sizeof(buffer)))) {
+        printf("Thread %d could not allocate storage2, errno = %d\n", threadNumber, errno);
+    }
+    
+    int *bufferPtr2 = (int *)value2;
+    bufferPtr2[0] = threadNumber;
+    bufferPtr2[1] = 2;  // indicates the key2
+    
+    status = pthread_setspecific(key2, (void *)value2);
+    if (status < 0) {
+        printf("pthread_setspecific failed2, thread %d, errno %d", threadNumber, errno);
+        pthread_exit((void *)12);
+    }
+    printf("Thread %d setspecific value2: %p\n", threadNumber, value2);
 
     pthread_exit((void *)0);
 }
@@ -72,7 +91,7 @@ static void *thread_entry_func(void *parm)
 static void destructor_func(void *param)
 {
     int *buffer = (int *)param;
-    printf("Destructor function invoked on thread %d\n", buffer[0]);
+    printf("Destructor function invoked on thread %d for key%d\n", buffer[0], buffer[1]);
     free(buffer);
 }
 
@@ -87,8 +106,13 @@ static void destructor_func(void *param)
         printf("pthread_key_create failed, errno=%d", errno);
         exit(1);
     }
+    
+    if ((status = pthread_key_create(&key2, destructor_func)) < 0) {
+        printf("pthread_key_create failed2, errno=%d", errno);
+        exit(1);
+    }
 
-    /* create 3 threads, pass each its number */
+    // Note: create only 1 threads with 2 keys
     for (i = 0; i < NUM_OF_THREAD; i++) {
         thread_params[i] = i + 1;
         status = pthread_create(&threads[i], NULL, thread_entry_func, (void *)&thread_params[i]);

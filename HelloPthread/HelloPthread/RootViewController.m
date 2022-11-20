@@ -11,6 +11,8 @@
 #import "CreatePthreadViewController.h"
 #import "CreateThreadKeyWithPthreadViewController.h"
 #import "CreateThreadKeyWithGCDThreadViewController.h"
+#import "CreateThreadKeyWithNSThreadViewController.h"
+#import "CreateMultipleThreadKeyWithPthreadViewController.h"
 
 @interface RootViewController ()
 @property (nonatomic, strong) NSArray *titles;
@@ -36,12 +38,16 @@
         @"Create pthread",
         @"thread_create_key with pthread",
         @"thread_create_key with GCD thread",
+        @"thread_create_key with NSThread",
+        @"thread_create_key multiple keys with pthread",
         @"call a test method",
     ];
     _classes = @[
         [CreatePthreadViewController class],
         [CreateThreadKeyWithPthreadViewController class],
         [CreateThreadKeyWithGCDThreadViewController class],
+        [CreateThreadKeyWithNSThreadViewController class],
+        [CreateMultipleThreadKeyWithPthreadViewController class],
         @"testMethod",
     ];
 }
