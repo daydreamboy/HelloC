@@ -141,12 +141,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->           
+>                 
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->           
+>                 
 >        free(ptr);
 >    }
 >    ```
@@ -231,29 +231,127 @@ void * realloc(void *ptr, size_t size);
 
 ## 4、pthread
 
-pthread相关函数
+POSIX thread (后面简称pthread)是一组支持多线程的函数集合。
 
-| 函数                | 作用                         |
-| ------------------- | ---------------------------- |
-| pthread_create      |                              |
-| pthread_getspecific |                              |
-| pthread_join        | 挂起调用线程，直至target结束 |
-| pthread_key_create  |                              |
-| pthread_setspecific |                              |
+pthread分为下面几组
+
+* Thread Routines
+
+* Attribute Object Routines
+* Mutex Routines
+* Condition Variable Routines
+* Read/Write Lock Routines
+* Per-Thread Context Routines
+* Cleanup Routines
+
+
+
+### (1) Thread Routines
+
+Thread Routines主要包含一些线程的基本函数，如下
+
+| 函数                   | 函数签名                                                     | 作用                                       |
+| ---------------------- | ------------------------------------------------------------ | ------------------------------------------ |
+| pthread_create         | int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg) | 创建一个新线程的执行                       |
+| pthread_cancel         | int pthread_cancel(pthread_t thread)                         | 取消线程的执行                             |
+| pthread_detach         | int pthread_detach(pthread_t thread)                         | 标记线程删除                               |
+| pthread_equal          | int pthread_equal(pthread_t t1, pthread_t t2)                | 比较两个线程的id                           |
+| pthread_exit           | void pthread_exit(void *value_ptr)                           | 结束当前calling  thread                    |
+| pthread_join           | int pthread_join(pthread_t thread, void **value_ptr)         | 挂起当前calling thread，一直到特定线程结束 |
+| pthread_kill           | int pthread_kill(pthread_t thread, int sig)                  | 发送signal给特定线程                       |
+| pthread_once           | `int pthread_once(pthread_once_t *once_control, void (*init_routine)(void))` | 调用一个用于初始化的回调函数               |
+| pthread_self           | pthread_t pthread_self(void)                                 | 返回当前calling thread对象                 |
+| pthread_setcancelstate |                                                              |                                            |
+| pthread_setcanceltype  |                                                              |                                            |
+| pthread_testcancel     |                                                              |                                            |
 
 说明
 
-> 按照字母顺序
+> 1. 调用pthread_create函数，就立即开始一个新线程的执行
+> 2. calling thread是调用函数的所在线程，比如当执行pthread_exit函数，则该函数会终止calling thread，这个calling thread就是执行pthread_exit函数的线程
+> 3. pthread_kill函数，虽然命名有kill，但是它的作用是kill某个线程，而发送signal给某个线程
 
 
 
-```c
-int pthread_create(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg);
-```
+### (2) Attribute Object Routines
+
+Attribute Object Routines包含操作线程属性相关的函数，如下
+
+| 函数                         | 函数签名                                       | 作用                         |
+| ---------------------------- | ---------------------------------------------- | ---------------------------- |
+| pthread_attr_destroy         | int pthread_attr_destroy(pthread_attr_t *attr) | 销毁一个线程属性对象         |
+| pthread_attr_getinheritsched |                                                |                              |
+| pthread_attr_getschedparam   |                                                |                              |
+| pthread_attr_getschedpolicy  |                                                |                              |
+| pthread_attr_getscope        |                                                |                              |
+| pthread_attr_getstacksize    |                                                |                              |
+| pthread_attr_getstackaddr    |                                                |                              |
+| pthread_attr_getdetachstate  |                                                |                              |
+| pthread_attr_init            | int pthread_attr_init(pthread_attr_t *attr)    | 使用默认值初始化一个线程属性 |
+| pthread_attr_setinheritsched |                                                |                              |
+| pthread_attr_setschedparam   |                                                |                              |
+| pthread_attr_setschedpolicy  |                                                |                              |
+| pthread_attr_setscope        |                                                |                              |
+| pthread_attr_setstacksize    |                                                |                              |
+| pthread_attr_setstackaddr    |                                                |                              |
+| pthread_attr_setdetachstate  |                                                |                              |
 
 
 
-### (1) pthread_create
+### (3) Mutex Routines
+
+Mutex Routines主要包含线程可能会使用到的互斥锁mutex相关函数，如下
+
+| 函数 | 函数签名 | 作用 |
+| ---- | -------- | ---- |
+|      |          |      |
+
+
+
+### (4) Condition Variable Routines
+
+Condition Variable Routines主要包含线条件变量相关函数，如下
+
+| 函数 | 函数签名 | 作用 |
+| ---- | -------- | ---- |
+|      |          |      |
+
+
+
+### (5) Read/Write Lock Routines
+
+Read/Write Lock Routines主要包含读写锁相关的函数，如下
+
+| 函数                          | 函数签名                                                     | 作用                                     |
+| ----------------------------- | ------------------------------------------------------------ | ---------------------------------------- |
+| pthread_rwlock_destroy        | int pthread_rwlock_destroy(pthread_rwlock_t *lock)           | 销毁一个读写锁对象                       |
+| pthread_rwlock_init           | int pthread_rwlock_init(pthread_rwlock_t *lock, const pthread_rwlockattr_t *attr) | 初始化一个读写锁对象                     |
+| pthread_rwlock_rdlock         | int pthread_rwlock_rdlock(pthread_rwlock_t *lock)            | 为读操作，加锁                           |
+| pthread_rwlock_tryrdlock      | int pthread_rwlock_tryrdlock(pthread_rwlock_t *lock)         | 为读操作，尝试加锁。如果锁不可用，则无效 |
+| pthread_rwlock_trywrlock      | int pthread_rwlock_trywrlock(pthread_rwlock_t *lock)         | 为写操作，尝试加锁。如果锁不可用，则无效 |
+| pthread_rwlock_unlock         | int pthread_rwlock_unlock(pthread_rwlock_t *lock)            | 读写锁解锁                               |
+| pthread_rwlock_wrlock         | int pthread_rwlock_wrlock(pthread_rwlock_t *lock)            | 为写操作，加锁                           |
+| pthread_rwlockattr_destroy    | int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr)   | 销毁一个读写锁的属性                     |
+| pthread_rwlockattr_getpshared |                                                              |                                          |
+| pthread_rwlockattr_init       | int pthread_rwlockattr_init(pthread_rwlockattr_t *attr)      | 初始化一个读写锁的属性                   |
+| pthread_rwlockattr_setpshared |                                                              |                                          |
+
+
+
+### (6) Per-Thread Context Routines
+
+Per-Thread Context Routines主要包含线程各自上下文的操作函数，如下
+
+| 函数                | 函数签名                                                     | 作用                               |
+| ------------------- | ------------------------------------------------------------ | ---------------------------------- |
+| pthread_key_create  | `int pthread_key_create(pthread_key_t *key, void (*routine)(void *))` | 创建线程特定的数据key              |
+| pthread_key_delete  | int pthread_key_delete(pthread_key_t key)                    | 删除线程特定的数据key              |
+| pthread_getspecific | void * pthread_getspecific(pthread_key_t key)                | 根据特定的key，获取线程特定的value |
+| pthread_setspecific | int pthread_setspecific(pthread_key_t key, const void *value_ptr) | 给定特定的key，设置线程特定的value |
+
+
+
+#### a. pthread_create
 
 pthread_create函数的签名，如下
 
@@ -302,7 +400,7 @@ void * thread_entry_point(void *arg)
 
 
 
-### (2) pthread_getspecific
+#### b. pthread_getspecific
 
 ```c
 void *pthread_getspecific(pthread_key_t key);
@@ -310,7 +408,7 @@ void *pthread_getspecific(pthread_key_t key);
 
 
 
-### (3) pthread_key_create
+#### c. pthread_key_create
 
 pthread_key_create函数的签名，如下
 
@@ -431,7 +529,7 @@ static void destructor_func(void *param)
 
 
 
-#### a. pthread_key_create用于GCD线程和NSThread
+##### pthread_key_create用于GCD线程和NSThread
 
 GCD线程和NSThread的底层也是创建pthread线程，因此pthread_key_create函数创建的key，也可以用于它们。
 
@@ -466,6 +564,124 @@ GCD线程和NSThread的底层也是创建pthread线程，因此pthread_key_creat
 
 
 
+### (7) Cleanup Routines
+
+Cleanup Routines主要包含清理相关函数，如下
+
+| 函数 | 函数签名 | 作用 |
+| ---- | -------- | ---- |
+|      |          |      |
+
+
+
+### (8) 其他np函数
+
+在macOS和iOS上还有一些以pthread开头，但是以np为后缀的pthread函数，这些函数不是POSIX定义的函数，代表不是跨平台的C API。如下
+
+| 函数                   | 函数签名                                                     | 作用                                        |
+| ---------------------- | ------------------------------------------------------------ | ------------------------------------------- |
+| pthread_mach_thread_np |                                                              | 获取线程id，在iOS8之后不再是这个用途        |
+| pthread_main_np        | int pthread_main_np(void)                                    | 判断当前线程是否主线程，返回非0表示是主线程 |
+| pthread_setname_np     | int pthread_setname_np(const char*)                          | 设置线程的名字[^5]                          |
+| pthread_threadid_np    | int pthread_threadid_np(pthread_t _Nullable,__uint64_t* _Nullable) | 获取线程id                                  |
+| pthread_getname_np     | int pthread_getname_np(pthread_t,char*,size_t)               | 获取线程的名字                              |
+
+说明
+
+> np，是Non-Portable的缩写[^4]
+
+
+
+#### a. pthread_setname_np/pthread_getname_np
+
+pthread_setname_np和pthread_getname_np，用于设置和获取线程的名字。它们的函数签名，如下
+
+```c
+int pthread_setname_np(const char*)
+int pthread_getname_np(pthread_t,char*,size_t)
+```
+
+举个例子，如下
+
+```objective-c
+static void * thread_entry_point2(void *parm)
+{
+    int rc;
+    rc = pthread_setname_np("THREADFOO");
+    if (rc != 0)
+        NSLog(@"pthread_setname_np failed");
+    
+    sleep(5);          // allow main program to set the thread name
+    return NULL;
+}
+
+- (void)test_pthread_setname_np {
+#define NAMELEN 16
+    
+    pthread_t thread;
+    int rc;
+    char thread_name[NAMELEN];
+
+    rc = pthread_create(&thread, NULL, thread_entry_point2, NULL);
+    if (rc != 0)
+       NSLog(@"pthread_create failed");
+
+    rc = pthread_getname_np(thread, thread_name, NAMELEN);
+    if (rc != 0)
+       NSLog(@"pthread_getname_np failed");
+
+    NSLog(@"Created a thread. Default name is: %s\n", thread_name);
+
+    sleep(2);
+
+    rc = pthread_getname_np(thread, thread_name, NAMELEN);
+    if (rc != 0)
+       NSLog(@"pthread_getname_np failed");
+    
+    NSLog(@"The thread name after setting it is %s.\n", thread_name);
+
+    rc = pthread_join(thread, NULL);
+    if (rc != 0)
+       NSLog(@"pthread_join failed");
+
+    printf("Done\n");
+}
+```
+
+
+
+#### b. pthread_threadid_np
+
+pthread_threadid_np用于获取线程id[^6]，举个例子，如下
+
+```objective-c
+- (void)test_pthread_threadid_np {
+    __uint64_t threadId;
+    if (pthread_threadid_np(0, &threadId)) {
+        threadId = pthread_mach_thread_np(pthread_self());
+    }
+    NSLog(@"current threadId is: %llu\n", threadId);
+}
+```
+
+说明
+
+> 在早期的MacOS或者iOS上，可以使用pthread_mach_thread_np获取线程id，但是iOS 8之后要换成使用pthread_threadid_np[^6]
+
+
+
+
+
+## 5、Linux man手册
+
+macOS上有关pthread函数的文档，如果在man中没有查询到，可以在下面这个Linux man手册尝试查询
+
+https://man7.org/linux/man-pages/index.html
+
+
+
+
+
 ## References
 
 [^1]:https://stackoverflow.com/a/5249150
@@ -473,4 +689,8 @@ GCD线程和NSThread的底层也是创建pthread线程，因此pthread_key_creat
 [^2]:https://www.javatpoint.com/dynamic-memory-allocation-in-c
 
 [^3]:https://www.ibm.com/docs/en/zos/2.1.0?topic=lf-pthread-key-create-create-thread-specific-data-key
+
+[^4]:https://stackoverflow.com/questions/2238564/pthread-functions-np-suffix
+[^5]:https://man7.org/linux/man-pages/man3/pthread_setname_np.3.html
+[^6]:https://stackoverflow.com/questions/8995650/what-does-the-prefix-in-nslog-mean
 
