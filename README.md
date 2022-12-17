@@ -141,12 +141,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                 
+>                    
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                 
+>                    
 >        free(ptr);
 >    }
 >    ```
@@ -670,9 +670,121 @@ pthread_threadid_np用于获取线程id[^6]，举个例子，如下
 
 
 
+## 5、snprintf和sprintf
+
+sprintf和snprintf是printf系列的函数，不同于printf和fprintf，它们将字符串格式化后输出特定buffer中。
 
 
-## 5、Linux man手册
+
+### (1) snprintf函数
+
+snprintf函数的签名，如下
+
+```c
+int snprintf(char *restrict buffer, size_t bufsz, const char *restrict format, ... );
+```
+
+snprintf函数一共有4个参数，如下
+
+* buffer，char类型的buffer数组
+* bufsz，buffer大小。注意：这个大小需要预留一个byte，放`\0`
+* format，格式化字符串
+* ...，可变参数列表
+
+返回值是int类型，表示完成格式化后的字符串长度，但不包含`\0`
+
+举个例子，如下
+
+```c
+- (void)test_snprintf_1 {
+    const char fmt[] = "sqrt(2) = %f";
+    // Note: calculate the string "sqrt(2) = %f" filled value from sqrt(2)
+    int sz = snprintf(NULL, 0, fmt, sqrt(2));
+    
+    // Note: make one more byte for terminating null
+    char buf[sz + 1];
+    int length = snprintf(buf, sizeof buf, fmt, sqrt(2));
+    // Note: it's safe use %s, which buf is terminated by '\0'
+    printf("%s\n", buf);
+    printf("length: %d\n", length);
+}
+```
+
+由于是格式化后的字符串，所以无法在代码中写死bufsz的值，可以通过调用snprintf函数，传入空指针的buffer，用于计算格式化后的字符串长度，然后用这个返回值，分配length+1的buffer，这样精确创建指定大小的buffer。
+
+注意
+
+> snprintf函数的返回值，总是完成格式化后的字符串长度length，不包含`\0`。如果bufsz比length+1要小，填充的buffer也总是bufsz。
+>
+> 举个例子，如下
+>
+> ```c
+> - (void)test_snprintf_2 {
+>     const char fmt[] = "sqrt(2) = %f";
+>     // Note: sizeof("<string>") will include the '\0'
+>     int sz = sizeof("sqrt"); // sz is 5
+>     
+>     // Note: make one more byte for terminating null
+>     char buf[sz + 1];
+>     int length = snprintf(buf, sizeof buf, fmt, sqrt(2));
+>     // Note: it's safe use %s, which buf is terminated by '\0'
+>     printf("%s\n", buf);
+>     printf("length: %d\n", length);
+> }
+> ```
+>
+> 输出结果，如下
+>
+> ```
+> sqrt(
+> length: 18
+> ```
+>
+> 这里sizeof操作符，将`\0`长度也算在内，所以sz的值是5
+
+
+
+### (2) sprintf函数
+
+sprintf函数的签名，如下
+
+```c
+int sprintf( char *restrict buffer, const char *restrict format, ... );
+```
+
+sprintf函数一共有3个参数，如下
+
+* buffer，char类型的buffer数组
+* format，格式化字符串
+* ...，可变参数列表
+
+返回值是int类型，表示完成格式化后的字符串长度，但不包含`\0`
+
+举个例子，如下
+
+```c
+- (void)test_sprintf {
+    const char fmt[] = "sqrt(2) = %f";
+    int sz = 25;
+    char buf[sz];
+    int length = sprintf(buf, fmt, sqrt(2));
+    for (int i = 0; i < sz + 1; ++i) {
+        printf("%c", buf[i]);
+    }
+    printf("\n");
+    printf("length: %d\n", length);
+}
+```
+
+和snprintf函数相比，少了一个设置buffer大小的参数bufsz，因此有些不安全，例如buffer分配的太小，sprintf函数格式化后的字符串，可能超过这个buffer大小，导致写到不可预期的内存地址。
+
+说明
+
+> 建议使用snprintf函数
+
+
+
+## 6、Linux man手册
 
 macOS上有关pthread函数的文档，如果在man中没有查询到，可以在下面这个Linux man手册尝试查询
 
