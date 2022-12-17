@@ -687,7 +687,7 @@ int snprintf(char *restrict buffer, size_t bufsz, const char *restrict format, .
 snprintf函数一共有4个参数，如下
 
 * buffer，char类型的buffer数组
-* bufsz，buffer大小。注意：这个大小需要预留一个byte，放`\0`
+* bufsz，buffer大小。注意：这个大小需要预留一个byte，snprintf函数总是会写入一个`\0`在buffer末尾
 * format，格式化字符串
 * ...，可变参数列表
 
@@ -740,7 +740,28 @@ snprintf函数一共有4个参数，如下
 > length: 18
 > ```
 >
-> 这里sizeof操作符，将`\0`长度也算在内，所以sz的值是5
+> 这里sizeof操作符，将`\0`长度也算在内，所以sz的值是5。
+
+
+
+再举个例子，如下
+
+```c
+- (void)test_snprintf_3_abnormal_case {
+    const char fmt[] = "sqrt(2) = %f";
+    // Note: "sqrt" length is 4 exclude '\0'
+    int sz = 4;
+    
+    // Note: only store 's', 'q', 'r', 't' on purpose
+    char buf[sz /* + 1*/];
+    int length = snprintf(buf, sizeof buf, fmt, sqrt(2));
+    // Note: it's safe use %s, which buf is terminated by '\0'
+    printf("%s\n", buf); // Output: sqr, the last byte used for '\0'
+    printf("length: %d\n", length);
+}
+```
+
+这里buf内容是"sqr"，不是预期的"sqrt"，是因为最后一个byte，被snprintf写入一个`\0`
 
 
 

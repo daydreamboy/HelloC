@@ -40,10 +40,37 @@
     printf("length: %d\n", length);
 }
 
-- (void)test_sprintf {
+- (void)test_snprintf_3_abnormal_case {
+    const char fmt[] = "sqrt(2) = %f";
+    // Note: "sqrt" length is 4 exclude '\0'
+    int sz = 4;
+    
+    // Note: only store 's', 'q', 'r', 't' on purpose
+    char buf[sz /* + 1*/];
+    int length = snprintf(buf, sizeof buf, fmt, sqrt(2));
+    // Note: it's safe use %s, which buf is terminated by '\0'
+    printf("%s\n", buf); // Output: sqr, the last byte used for '\0'
+    printf("length: %d\n", length);
+}
+
+- (void)test_sprintf_1 {
     const char fmt[] = "sqrt(2) = %f";
     int sz = 25;
     char buf[sz];
+    int length = sprintf(buf, fmt, sqrt(2));
+    for (int i = 0; i < sz + 1; ++i) {
+        printf("%c", buf[i]);
+    }
+    printf("\n");
+    printf("length: %d\n", length);
+}
+
+- (void)test_sprintf_2_abnormal_case {
+    const char fmt[] = "sqrt(2) = %f";
+    int sz = 4;
+    char buf[sz];
+    
+    // Warning: buf size is less then the result of formatted string
     int length = sprintf(buf, fmt, sqrt(2));
     for (int i = 0; i < sz + 1; ++i) {
         printf("%c", buf[i]);
