@@ -141,12 +141,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                    
+>                       
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                    
+>                       
 >        free(ptr);
 >    }
 >    ```
@@ -805,7 +805,58 @@ sprintf函数一共有3个参数，如下
 
 
 
-## 6、Linux man手册
+## 6、文件操作
+
+### (1) 判断文件/文件夹是否存在
+
+使用access函数。
+
+举个例子[^7]，如下
+
+```objective-c
+- (void)test_check_file_or_folder_exists {
+    NSError *error;
+    NSString *filePath = [[WCApplicationTool appDocumentsDirectory] stringByAppendingPathComponent:@"test.txt"];
+    [WCFileTool createNewFileAtPath:filePath overwrite:YES error:&error];
+    
+    XCTAssertNil(error);
+    
+    // Case 1: check file exists
+    // @see https://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c
+    if (access(filePath.UTF8String, F_OK) == 0) {
+        // file exists
+        XCTAssertTrue(YES);
+        NSLog(@"file exists at %@", filePath);
+    }
+    else {
+        // file doesn't exist
+        XCTAssertFalse(YES);
+        NSLog(@"file not exists at %@", filePath);
+    }
+    
+    // Case 2: check folder exists
+    NSString *folderPath = [WCApplicationTool appDocumentsDirectory];
+    if (access(folderPath.UTF8String, F_OK) == 0) {
+        // folder exists
+        XCTAssertTrue(YES);
+        NSLog(@"folder exists at %@", folderPath);
+    }
+    else {
+        // folder doesn't exist
+        XCTAssertFalse(YES);
+        NSLog(@"folder not exists at %@", folderPath);
+    }
+}
+
+```
+
+
+
+
+
+
+
+## 7、Linux man手册
 
 macOS上有关pthread函数的文档，如果在man中没有查询到，可以在下面这个Linux man手册尝试查询
 
@@ -826,4 +877,6 @@ https://man7.org/linux/man-pages/index.html
 [^4]:https://stackoverflow.com/questions/2238564/pthread-functions-np-suffix
 [^5]:https://man7.org/linux/man-pages/man3/pthread_setname_np.3.html
 [^6]:https://stackoverflow.com/questions/8995650/what-does-the-prefix-in-nslog-mean
+
+[^7]:https://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c
 

@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4F374E6729516BA400C48F1E /* Test_uuid.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F374E6629516BA400C48F1E /* Test_uuid.m */; };
+		4F374E712951E5B800C48F1E /* Test_File.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F374E702951E5B800C48F1E /* Test_File.m */; };
+		4F374E792951E75700C48F1E /* WCFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F374E782951E75700C48F1E /* WCFileTool.m */; };
+		4F374E7C2951E87B00C48F1E /* WCApplicationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F374E7B2951E87B00C48F1E /* WCApplicationTool.m */; };
 		4F3BC15729055FF50091FF59 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC15629055FF50091FF59 /* AppDelegate.m */; };
 		4F3BC15A29055FF50091FF59 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC15929055FF50091FF59 /* SceneDelegate.m */; };
 		4F3BC15D29055FF50091FF59 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F3BC15C29055FF50091FF59 /* ViewController.m */; };
@@ -49,6 +52,11 @@
 
 /* Begin PBXFileReference section */
 		4F374E6629516BA400C48F1E /* Test_uuid.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_uuid.m; sourceTree = "<group>"; };
+		4F374E702951E5B800C48F1E /* Test_File.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_File.m; sourceTree = "<group>"; };
+		4F374E772951E75700C48F1E /* WCFileTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCFileTool.h; sourceTree = "<group>"; };
+		4F374E782951E75700C48F1E /* WCFileTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCFileTool.m; sourceTree = "<group>"; };
+		4F374E7A2951E87B00C48F1E /* WCApplicationTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCApplicationTool.h; sourceTree = "<group>"; };
+		4F374E7B2951E87B00C48F1E /* WCApplicationTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WCApplicationTool.m; sourceTree = "<group>"; };
 		4F3BC15229055FF50091FF59 /* HelloC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloC.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3BC15529055FF50091FF59 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4F3BC15629055FF50091FF59 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -99,6 +107,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F374E762951E74200C48F1E /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				4F374E772951E75700C48F1E /* WCFileTool.h */,
+				4F374E782951E75700C48F1E /* WCFileTool.m */,
+				4F374E7A2951E87B00C48F1E /* WCApplicationTool.h */,
+				4F374E7B2951E87B00C48F1E /* WCApplicationTool.m */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 		4F3BC14929055FF50091FF59 = {
 			isa = PBXGroup;
 			children = (
@@ -142,10 +161,12 @@
 		4F3BC173290560040091FF59 /* Test_C */ = {
 			isa = PBXGroup;
 			children = (
-				4F3BC17B290560300091FF59 /* Test_time.m */,
+				4F374E762951E74200C48F1E /* Tools */,
+				4F374E702951E5B800C48F1E /* Test_File.m */,
 				4F3BC181290590100091FF59 /* Test_Macro.m */,
 				4F987B10290690BB004D4250 /* Test_printf.m */,
 				4F4FA719294DC01500258637 /* Test_snprintf.m */,
+				4F3BC17B290560300091FF59 /* Test_time.m */,
 				4F374E6629516BA400C48F1E /* Test_uuid.m */,
 			);
 			path = Test_C;
@@ -310,9 +331,12 @@
 			files = (
 				4F3BC182290590100091FF59 /* Test_Macro.m in Sources */,
 				4F4FA71A294DC01500258637 /* Test_snprintf.m in Sources */,
+				4F374E7C2951E87B00C48F1E /* WCApplicationTool.m in Sources */,
 				4F3BC17C290560300091FF59 /* Test_time.m in Sources */,
 				4F987B11290690BB004D4250 /* Test_printf.m in Sources */,
 				4F374E6729516BA400C48F1E /* Test_uuid.m in Sources */,
+				4F374E712951E5B800C48F1E /* Test_File.m in Sources */,
+				4F374E792951E75700C48F1E /* WCFileTool.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
