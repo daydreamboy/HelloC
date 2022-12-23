@@ -141,12 +141,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                       
+>                          
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                       
+>                          
 >        free(ptr);
 >    }
 >    ```
@@ -852,11 +852,13 @@ sprintf函数一共有3个参数，如下
 
 
 
+## 7、perror、erromsg、errono
+
+TODO
 
 
 
-
-## 7、Linux man手册
+## 8、Linux man手册
 
 macOS上有关pthread函数的文档，如果在man中没有查询到，可以在下面这个Linux man手册尝试查询
 
