@@ -141,12 +141,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                          
+>                             
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                          
+>                             
 >        free(ptr);
 >    }
 >    ```
@@ -858,7 +858,75 @@ TODO
 
 
 
-## 8、Linux man手册
+## 8、kqueue
+
+https://gist.github.com/daydreamboy/5b9b961fd4e4174cf4ae957c4fa49b1e
+
+
+
+## 9、时间格式化
+
+strftime函数的签名，如下
+
+```c
+size_t strftime(char *str, size_t count, const char *format, const struct tm *time);
+```
+
+有4个参数，如下
+
+* str，char数组类型，用于存放格式化后的字符串
+* count，最大可以写入str数组的byte个数
+* format，格式化字符串。具体conversion specifier可以参考C manual。
+* time，struct tm的指针
+
+举个例子，如下
+
+```c
+- (void)test_strftime {
+    time_t     now;
+    struct tm  ts;
+    char       buf[80];
+
+    // Get current time
+    time(&now);
+
+    // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
+    ts = *localtime(&now);
+    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+    printf("%s\n", buf);
+    
+    strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S %z", &ts);
+    printf("%s\n", buf);
+}
+```
+
+strftime函数的conversion specifier，仅支持秒级别，不支持更低的时间单位。
+
+需要自己处理秒以下的时间，举个例子[^8]，如下
+
+```c
+- (void)test_strftime_with_microseconds {
+    char fmt[64], buf[64];
+    struct timeval tv;
+    struct tm *tm;
+
+    gettimeofday(&tv, NULL);
+    if ((tm = localtime(&tv.tv_sec)) != NULL) {
+        strftime(fmt, sizeof fmt, "%Y-%m-%d %H:%M:%S.%%06u%z", tm);
+        snprintf(buf, sizeof buf, fmt, tv.tv_usec);
+        printf("%s\n", buf);
+        NSLog(@"test");
+    }
+}
+```
+
+
+
+
+
+
+
+## 10、Linux man手册
 
 macOS上有关pthread函数的文档，如果在man中没有查询到，可以在下面这个Linux man手册尝试查询
 
@@ -881,4 +949,6 @@ https://man7.org/linux/man-pages/index.html
 [^6]:https://stackoverflow.com/questions/8995650/what-does-the-prefix-in-nslog-mean
 
 [^7]:https://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c
+
+[^8]:https://stackoverflow.com/questions/1551597/using-strftime-in-c-how-can-i-format-time-exactly-like-a-unix-timestamp
 
