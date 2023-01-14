@@ -141,12 +141,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                             
+>                                
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                             
+>                                
 >        free(ptr);
 >    }
 >    ```
@@ -860,7 +860,247 @@ TODO
 
 ## 8、kqueue
 
+kqueue是一个系统通知机制，它由BSD系统提供，它允许程序监听许多系统事件，例如signal、文件事件等。
+
+kqueue相关系统函数，有
+
+* kqueue函数
+* kevent函数
+* EV_SET宏
+
+其中，kqueue函数创建一个kqueue的fd，而kevent函数用于设置监听和获取事件，EV_SET宏用于便利设置kevent结构体。
+
+说明
+
+> kqueue，对应kernel queue的缩写。而kevent，对应kernel event的缩写。
+
+苹果官方文档对kqueue函数的描述[^9]，如下
+
+> The kqueue() system call provides a generic method of notifying the user when an kernel event (kevent) happens or a condition holds, based on the results of small pieces of kernel code termed filters. 
+
+
+
+在iOS上的示例代码，如下
+
+```objective-c
+- (void)installSignalEventHandler {
+    // Note: create a thread to listen signal event for kqueue
+    pthread_t thread;
+    pthread_create(&thread, NULL, handleSignalEvent, NULL);
+}
+
+static void *handleSignalEvent(void *param)
+{
+    // Note: must let signal/sigaction ignore SIGINT, because the kqueue has a lower precedence
+    struct sigaction action = { 0 };
+    action.sa_handler = SIG_IGN;
+    sigaction(SIGINT, &action, NULL);
+    
+    int fd = kqueue();
+    struct kevent eventToRegister = {
+        SIGINT,
+        EVFILT_SIGNAL,
+        EV_ADD,
+        0,
+        0
+    };
+    
+    WCLog(@"install event handler fd: %d\n", fd);
+    
+    // Note: register the listening kevent
+    if (kevent(fd, &eventToRegister, 1, NULL, 0, NULL) < 0) {
+        perror("kevent");
+    }
+    
+    WCLog(@"kqueque signal event handler listening...\n");
+    
+    for (;;) {
+        struct kevent eventToGet = { 0 };
+        
+        // Note: listen the signal kevent
+        if (kevent(fd, NULL, 0, &eventToGet, 1, NULL) < 0) {
+            perror("kevent");
+        }
+        
+        if (eventToGet.filter == EVFILT_SIGNAL) {
+            WCLog(@"got signal %d\n", (int)eventToGet.ident);
+            
+            NSString *crashLogContent = [WCSignalTool reportableStringWithSignal:(int)eventToGet.ident];
+            
+            WCLog(@"CrashLog: %@", crashLogContent);
+           
+            NSString *filePath = SignalLogFilePath;
+            [crashLogContent writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        }
+    }
+
+    return NULL;
+}
+```
+
+> 示例代码，见HelloNSException的UseKqueueViewController
+
+有几点需要说明
+
+* 使用kqueue监听signal事件，和signal函数、sigaction函数相比，它的优先级低。
+
+  苹果官方文档提到这一点[^9]，如下
+
+  > This coexists with the signal() and sigaction() facilities, and has a lower precedence.
+
+  因此，需要让signal函数、sigaction函数忽略特定信号，这样kqueue监听signal事件才能监听信息。上面代码让sigaction函数忽略SIGINT信号
+
+* 上面两次调用kevent函数，用途是不一样的，第一次调用是注册监听的kevent，第二次调用是监听kevent，由于会监听到其他类型的kevent，需要使用event.filter == EVFILT_SIGNAL来找处理SIGNAL类型的kevent。
+
+* 创建一个独立的线程用于监听signal，是因为for循环中的kevent函数会一直等待事件，必须需要新开线程，不能用于主线程中
+
+
+
+关于kqueue函数和kevent函数，以及相关参数，用法比较复杂。这里参考苹果官方文档[^9]，以监听signal类型的kevent，做简单介绍。
+
+kqueue函数和kevent函数的签名如下
+
+```c
+#include <sys/types.h>
+#include <sys/event.h>
+#include <sys/time.h>
+
+int kqueue(void);
+
+int kevent(int kq, const struct kevent *changelist, int nchanges, struct kevent *eventlist, int nevents, const struct timespec *timeout);
+
+EV_SET(&kev, ident, filter, flags, fflags, data, udata);
+```
+
+kqueue函数，每次调用都创建新的kqueue，并返回一个新fd
+
+> The kqueue() system call creates a new kernel event queue and returns a descriptor.  The queue is not inherited by a child created with fork(2).
+
+
+
+kevent函数，有2个作用：注册监听的kevent到kqueue，和从kqueue中获取kevent
+
+> The kevent() system call is used to register events with the queue, and return any pending events to the user. 
+
+
+
+kevent函数有6个参数，实际上可以分为4部分
+
+* kq参数，是kqueue函数返回的值，用于指定哪个kqueue
+
+* changelist和nchanges参数，是一对参数，分别是kevent结构体类型的数组指针，和该数组的大小。使用changelist参数，用于向kqueue注册监听的kevent。
+
+  > The changelist argument is a pointer to an array of kevent structures, as defined in <sys/event.h>. All changes contained in the changelist are applied before any pending events are read from the queue.  The nchanges argument gives the size of  changelist.
+
+* eventlist和nevents参数，是一对参数，分别是kevent结构体类型的数组指针，和该数组的大小。使用eventlist参数，用于从kqueue中获取kevent。一般方式都是在for循环中，每次获取一个kevent。例如上面的示例代码。
+
+* timeout参数，是timespec结构体指针类型，用于设置监听的超时时间。如果设置NULL，则一直等待监听。
+
+  >If timeout is a non-NULL pointer, it specifies a maximum interval to wait for an event, which will be interpreted as a struct timespec.  If timeout is a NULL pointer, kevent() waits indefinitely.
+
+
+
+EV_SET宏，用于初始化kevent结构体。在上面示例代码，没有使用EV_SET宏，而是直接赋值kevent结构体。
+
+> The EV_SET() macro is provided for ease of initializing a kevent structure.
+
+
+
+### a. 监听多个kevent事件
+
+在上面介绍kevent函数时，看到可以注册多个kevent，从而同时监听多个事件。这里参考SO上代码[^11]，示例如下
+
+```c
+int main(int argc, const char * argv[]) {
+    
+    if (argc != 2) {
+        fprintf(stdout, "Usage: ./executable file_to_path\n");
+        return 0;
+    }
+    
+    /* A single kqueue */
+    int kq = kqueue();
+    /* Two kevent structs */
+    int count = 2;
+    struct kevent *ke = malloc(sizeof(struct kevent) * count);
+
+    // Note: ignore signal SIGINT
+    signal(SIGINT, SIG_IGN);
+    
+    /* Initialise one struct for the file descriptor, and one for SIGINT */
+    int fd = open(argv[1], O_RDONLY);
+    EV_SET(ke, fd, EVFILT_VNODE, EV_ADD | EV_CLEAR, NOTE_DELETE | NOTE_RENAME, 0, NULL);
+    EV_SET(ke + 1, SIGINT, EVFILT_SIGNAL, EV_ADD, 0, 0, NULL);
+
+    /* Register for the events */
+    if (kevent(kq, ke, count, NULL, 0, NULL) < 0) {
+        perror("kevent");
+    }
+
+    printf("Listening kevent...\n");
+    
+    while (1) {
+        // Note: reset previous ke, and use it to get kevent
+        memset(ke, 0x00, sizeof(struct kevent));
+        if (kevent(kq, NULL, 0, ke, 1, NULL) < 0) {
+            perror("kevent");
+            continue;
+        }
+
+        switch (ke->filter)
+        {
+            /* File descriptor event: let's examine what happened to the file */
+            case EVFILT_VNODE: {
+                printf("Events %d on file descriptor %d\n", ke->fflags, (int) ke->ident);
+                
+                /*
+                if (ke->fflags & NOTE_DELETE)
+                    printf("The unlink() system call was called on the file referenced by the descriptor.\n");
+                 */
+                if (ke->fflags & NOTE_WRITE)
+                    printf("A write occurred on the file referenced by the descriptor.\n");
+                if (ke->fflags & NOTE_EXTEND)
+                    printf("The file referenced by the descriptor was extended.\n");
+                if (ke->fflags & NOTE_ATTRIB)
+                    printf("The file referenced by the descriptor had its attributes changed.\n");
+                /*
+                if (ke->fflags & NOTE_LINK)
+                    printf("The link count on the file changed.\n");
+                 */
+                if (ke->fflags & NOTE_RENAME)
+                    printf("The file referenced by the descriptor was renamed.\n");
+                if (ke->fflags & NOTE_REVOKE)
+                    printf("Access to the file was revoked via revoke(2) or the underlying fileystem was unmounted.");
+                break;
+            }
+            /* Signal event */
+            case EVFILT_SIGNAL: {
+                printf("Received Sigal: %s\n", strsignal((int)(ke->ident)));
+                break;
+            }
+            /* This should never happen */
+            default:
+                printf("Unknown filter\n");
+        }
+    }
+    
+    return 0;
+}
+```
+
+> 示例代码，见HelloKqueue
+
+
+
+
+
+TODO
+
 https://gist.github.com/daydreamboy/5b9b961fd4e4174cf4ae957c4fa49b1e
+
+
+
+
 
 
 
@@ -951,4 +1191,8 @@ https://man7.org/linux/man-pages/index.html
 [^7]:https://stackoverflow.com/questions/230062/whats-the-best-way-to-check-if-a-file-exists-in-c
 
 [^8]:https://stackoverflow.com/questions/1551597/using-strftime-in-c-how-can-i-format-time-exactly-like-a-unix-timestamp
+
+[^9]: https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/kqueue.2.html
+[^10]:https://www.mikeash.com/pyblog/friday-qa-2011-04-01-signal-handling.html
+[^11]:https://stackoverflow.com/questions/15843147/use-kqueue-to-respond-to-more-than-one-event-type
 
