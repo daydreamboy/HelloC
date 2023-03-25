@@ -141,12 +141,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                                
+>                                      
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                                
+>                                      
 >        free(ptr);
 >    }
 >    ```
@@ -269,7 +269,7 @@ Thread Routines主要包含一些线程的基本函数，如下
 
 > 1. 调用pthread_create函数，就立即开始一个新线程的执行
 > 2. calling thread是调用函数的所在线程，比如当执行pthread_exit函数，则该函数会终止calling thread，这个calling thread就是执行pthread_exit函数的线程
-> 3. pthread_kill函数，虽然命名有kill，但是它的作用是kill某个线程，而发送signal给某个线程
+> 3. pthread_kill函数，虽然命名有kill，但是它的作用不是kill某个线程，而发送signal给某个线程
 
 
 
@@ -852,7 +852,7 @@ sprintf函数一共有3个参数，如下
 
 
 
-## 7、perror、erromsg、errono
+## 7、perror、erromsg、errono、err
 
 TODO
 
@@ -1088,7 +1088,30 @@ int main(int argc, const char * argv[]) {
 }
 ```
 
-> 示例代码，见HelloKqueue
+> 示例代码，见HelloKqueue的ListenMultipleEvent
+
+上面创建两个kevent，分别监听文件变更事件，和SIGINT信号。struct kevent *ke指针指向包含两个kevent的数组，使用EV_SET宏分别设置kevent结构体。然后使用kevent函数注册这两个kevent结构体。
+
+
+
+* 在Xcode中设置Arguments Passed On Launch，设置需要监听的文件路径。当运行程序，修改对应的文件名。
+* 在Terminal中执行kill命令，`kill -s INT 18327`（18327是应用程序的PID），向程序的进程发送SIGINT信号
+
+
+
+示例输出，如下
+
+```
+Listening kevent...
+Events 32 on file descriptor 4
+The file referenced by the descriptor was renamed.
+Events 32 on file descriptor 4
+The file referenced by the descriptor was renamed.
+Received Sigal: Interrupt: 2
+Received Sigal: Interrupt: 2
+```
+
+
 
 
 
