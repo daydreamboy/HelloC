@@ -22,6 +22,220 @@ double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
 
 
 
+### (2) 获取静态函数地址
+
+这里介绍如何获取静态C函数地址在内存的地址。由于静态函数并不是外部符号，是不能直接通过函数名调用的，因此能拿到函数地址，则能直接调用静态函数，这个是hook c静态函数的其中一步。
+
+下面示例如何hook c静态函数的，用于演示步骤，实际比这个要复杂得多。
+
+```objective-c
+// Note: the original c static function
+static int add(int a, int b) {
+    return a + b;
+}
+
+// Note: the replacement c static function to hook
+static int hooked_add(int a, int b) {
+    printf("hooked_add() called\n");
+    
+    // Note: should use address of original function,
+    // here use function name for demonstration
+    return add(a, b) + 10;
+}
+
+@interface Test_hook_static_c_function_pseudo : XCTestCase
+@end
+
+@implementation Test_hook_static_c_function_pseudo
+
+- (void)test {
+    int (*fp)(int, int);
+       
+    fp = add;
+    printf("add(2,3) = %d\n", fp(2,3));
+    
+    fp = hooked_add;
+    printf("hooked_add(2,3) = %d\n", fp(2,3));
+}
+
+@end
+```
+
+> 示例代码，见Test_hook_static_c_function_pseudo.m
+
+步骤如下
+
+* 查看源码确定要hook函数的签名，例如add函数。
+* 提供hook函数，并在hook函数中获取原始函数的函数地址，用于调用原始函数
+* 在内存中，将调用原始函数的目标地址，写成hook函数的地址。例如上面将上面fp的内容换成hooked_add，那么再次调用fp函数，则会跳转到hook函数里面
+
+这里主要介绍如何获取静态C函数地址在内存的地址。
+
+示例代码，如下
+
+```c
+static int add(int a, int b) {
+    return a + b;
+}
+
+__attribute__((constructor))
+int sub(int a, int b) {
+    return a - b;
+}
+
+int main(int argc, char * argv[]) {
+    NSString * appDelegateClassName;
+    @autoreleasepool {
+        // Setup code that might create autoreleased objects goes here.
+        appDelegateClassName = NSStringFromClass([AppDelegate class]);
+    }
+    
+    int r = add(1, 2);
+    NSLog(@"%d", r);
+
+    return UIApplicationMain(argc, argv, nil, appDelegateClassName);
+}
+
+```
+
+说明
+
+> 静态C函数，如果没有被调用的话，可能会被编译器优化掉。有两种方式防止被优化掉：
+>
+> * 调用静态C函数
+> * 将静态C函数声明为构造函数
+
+使用nm命令查看`_add`和`_sub`在MachO的地址，如下
+
+```shell
+$ nm -m HelloC | grep -e "_add" -e "_sub"
+00000001000021a0 (__TEXT,__text) non-external _add
+00000001000020c0 (__TEXT,__text) non-external _sub
+```
+
+使用otool命令反汇编`__text`段，搜索`_add`和`_sub`的函数地址，如下
+
+```shell
+$ otool -tV HelloC | grep -e "_add" -e "_sub" -A1
+_sub:
+00000001000020c0	pushq	%rbp
+--
+000000010000214c	callq	_add
+0000000100002151	movl	%eax, -0x1c(%rbp)
+--
+_add:
+00000001000021a0	pushq	%rbp
+```
+
+可以看出和nm的结果是一样的。
+
+由于函数在内存中的地址，是镜像image的加载地址，加上MachO中的偏移量，那么在lldb中可以算出add函数和sub函数的内存地址。
+
+计算公式是：函数地址 = 镜像image的加载地址  + MachO中的偏移量 
+
+​                                       = 镜像image的加载地址  + 函数在MachO中的地址 - 4GB
+
+说明
+
+> 这里的4GB (0x0000000100000000)是MachO文件的起始地址预留的地址空间，64位的MachO文件总是从4GB开始算地址。
+
+示例如下
+
+```shell
+(lldb) image list HelloC
+[  0] A2992373-13CE-3BE1-AEB3-6EDC4A720FF9 0x0000000108cc2000 /Users/wesley_chen/Library/Developer/Xcode/DerivedData/HelloC-gclmwhthurqacjadtcsryagjoeib/Build/Products/Debug-iphonesimulator/HelloC.app/HelloC 
+(lldb) p/x  (long)4 * 1024 * 1024 * 1024
+(long) $11 = 0x0000000100000000
+(lldb) p/x 0x0000000108cc2000 + 0x00000001000021a0 - 0x0000000100000000
+(long) $12 = 0x0000000108cc41a0
+(lldb) image lookup -a 0x0000000108cc41a0
+      Address: HelloC[0x00000001000021a0] (HelloC.__TEXT.__text + 784)
+      Summary: HelloC`add at main.m:11
+(lldb) p add
+(int (*)(int, int)) $13 = 0x0000000108cc41a0 (HelloC`add at main.m:11)
+(lldb) 
+```
+
+由于lldb不支持十六进制和十进制的混合计算，这里手动先算下4GB的十六进制是0x0000000100000000，而且要转成long，lldb才能计算正确。
+
+p/x 0x0000000108cc2000 + 0x00000001000021a0 - 0x0000000100000000是按照上面公式得出add函数在内存的地址。可以使用`image lookup -a`或者`p add`，确认这个地址是否正确。
+
+说明
+
+> 这里通过nm或者otool找到函数在MachO的偏移量，实际上可以通过实现代码分析MachO文件，找这个偏移量，那么通过代码也可以实现在lldb中的操作，因此即使是C静态函数，没有外部符号，也可以拿到它的函数地址。
+
+
+
+在Release模式下，实际上在lldb中是不能看到add函数，但是可以看到sub函数，如下
+
+```shell
+(lldb) p add
+error: expression failed to parse:
+error: <user expression 0>:1:1: 'add' has unknown type; cast it to its declared type to use it
+add
+^~~
+(lldb) p sub
+(int (*)(int, int)) $0 = 0x0000000104cf3320 (HelloC`sub at main.m:16)
+```
+
+区分在于两个函数是静态函数和静态构造函数，静态构造函数需要让系统调用，因此符号是对外可见的。
+
+为了确认计算add函数是对的，修改代码，直接将add函数的地址打印出来。
+
+```c
+NSLog(@"%p", add);
+```
+
+
+
+#### a. 在Release模式下查看静态C函数地址
+
+由于采用Release模式编译，可执行文件输出路径也变了，需要重新查看下`_add`和`_sub`符号的地址，如下
+
+```shell
+$ nm -m HelloC | grep -e "_add" -e "_sub"
+00000001000023ab (__TEXT,__text) non-external _add
+0000000100002315 (__TEXT,__text) non-external _sub
+```
+
+在lldb中重新计算，如下
+
+```shell
+2023-04-16 16:41:44.375528+0800 HelloC[11263:140934] 0x102e4e3ab
+(lldb) image list HelloC
+[  0] 9E660F80-3347-38CD-AFB2-6501E4FD1238 0x0000000102e4c000 /Users/wesley_chen/Library/Developer/Xcode/DerivedData/HelloC-gclmwhthurqacjadtcsryagjoeib/Build/Products/Release-iphonesimulator/HelloC.app/HelloC 
+      /Users/wesley_chen/Library/Developer/Xcode/DerivedData/HelloC-gclmwhthurqacjadtcsryagjoeib/Build/Products/Release-iphonesimulator/HelloC.app.dSYM/Contents/Resources/DWARF/HelloC
+(lldb) p/x 0x0000000102e4c000 + 0x23ab
+(long) $0 = 0x0000000102e4e3ab
+```
+
+这个地址和NSLog输出是一样的，说明是正确的。
+
+使用`image lookup -a`查看也是正确的，如下
+
+```shell
+(lldb) image lookup -a 0x0000000102e4e3ab
+      Address: HelloC[0x00000001000023ab] (HelloC.__TEXT.__text + 353)
+      Summary: HelloC`add at main.m:11
+```
+
+
+
+#### b. lldb中调用静态C函数地址
+
+将函数内存地址强制转成函数指针调用，如下
+
+```shell
+(lldb) e ((int (*)(int, int))0x0000000102e4e3ab)(1, 2)
+(int) $1 = 3
+(lldb) e ((int (*)(int, int))0x0000000102e4e3ab)(2, 3)
+(int) $2 = 5
+```
+
+实际上在代码中也可以实现这样的操作，这里不再介绍。
+
+
+
 ## 2、char *和char[]
 
 TODO
@@ -141,12 +355,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                                      
+>                                         
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                                      
+>                                         
 >        free(ptr);
 >    }
 >    ```

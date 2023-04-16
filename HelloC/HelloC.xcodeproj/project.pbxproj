@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F1E9C0B29D5B9EE007892DA /* Test_hook_static_c_function_pseudo.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F1E9C0A29D5B9EE007892DA /* Test_hook_static_c_function_pseudo.m */; };
 		4F374E6729516BA400C48F1E /* Test_uuid.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F374E6629516BA400C48F1E /* Test_uuid.m */; };
 		4F374E712951E5B800C48F1E /* Test_File.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F374E702951E5B800C48F1E /* Test_File.m */; };
 		4F374E792951E75700C48F1E /* WCFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F374E782951E75700C48F1E /* WCFileTool.m */; };
@@ -51,6 +52,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F1E9C0A29D5B9EE007892DA /* Test_hook_static_c_function_pseudo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_hook_static_c_function_pseudo.m; sourceTree = "<group>"; };
 		4F374E6629516BA400C48F1E /* Test_uuid.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_uuid.m; sourceTree = "<group>"; };
 		4F374E702951E5B800C48F1E /* Test_File.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_File.m; sourceTree = "<group>"; };
 		4F374E772951E75700C48F1E /* WCFileTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WCFileTool.h; sourceTree = "<group>"; };
@@ -161,13 +163,14 @@
 		4F3BC173290560040091FF59 /* Test_C */ = {
 			isa = PBXGroup;
 			children = (
-				4F374E762951E74200C48F1E /* Tools */,
 				4F374E702951E5B800C48F1E /* Test_File.m */,
+				4F1E9C0A29D5B9EE007892DA /* Test_hook_static_c_function_pseudo.m */,
 				4F3BC181290590100091FF59 /* Test_Macro.m */,
 				4F987B10290690BB004D4250 /* Test_printf.m */,
 				4F4FA719294DC01500258637 /* Test_snprintf.m */,
 				4F3BC17B290560300091FF59 /* Test_time.m */,
 				4F374E6629516BA400C48F1E /* Test_uuid.m */,
+				4F374E762951E74200C48F1E /* Tools */,
 			);
 			path = Test_C;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F3BC182290590100091FF59 /* Test_Macro.m in Sources */,
+				4F1E9C0B29D5B9EE007892DA /* Test_hook_static_c_function_pseudo.m in Sources */,
 				4F4FA71A294DC01500258637 /* Test_snprintf.m in Sources */,
 				4F374E7C2951E87B00C48F1E /* WCApplicationTool.m in Sources */,
 				4F3BC17C290560300091FF59 /* Test_time.m in Sources */,
