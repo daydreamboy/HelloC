@@ -25,11 +25,20 @@
 		4F3BC18C290591140091FF59 /* MySecretStaticLibrary.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4F3BC189290591140091FF59 /* MySecretStaticLibrary.h */; };
 		4F3BC1912905917E0091FF59 /* libMySecretStaticLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3BC187290591130091FF59 /* libMySecretStaticLibrary.a */; };
 		4F4FA71A294DC01500258637 /* Test_snprintf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4FA719294DC01500258637 /* Test_snprintf.m */; };
+		4F718F3E2A04FC96009E9093 /* TestCHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F718F3D2A04FC96009E9093 /* TestCHook.m */; };
+		4F718F452A04FCF9009E9093 /* HookNSLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F718F442A04FCF9009E9093 /* HookNSLog.m */; };
 		4F987B11290690BB004D4250 /* Test_printf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F987B10290690BB004D4250 /* Test_printf.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
 		4F3BC176290560040091FF59 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F3BC14A29055FF50091FF59 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F3BC15129055FF50091FF59;
+			remoteInfo = HelloC;
+		};
+		4F718F3F2A04FC96009E9093 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 4F3BC14A29055FF50091FF59 /* Project object */;
 			proxyType = 1;
@@ -80,6 +89,9 @@
 		4F3BC189290591140091FF59 /* MySecretStaticLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MySecretStaticLibrary.h; sourceTree = "<group>"; };
 		4F3BC18A290591140091FF59 /* MySecretStaticLibrary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySecretStaticLibrary.m; sourceTree = "<group>"; };
 		4F4FA719294DC01500258637 /* Test_snprintf.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_snprintf.m; sourceTree = "<group>"; };
+		4F718F3B2A04FC96009E9093 /* TestCHook.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestCHook.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F718F3D2A04FC96009E9093 /* TestCHook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestCHook.m; sourceTree = "<group>"; };
+		4F718F442A04FCF9009E9093 /* HookNSLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HookNSLog.m; sourceTree = "<group>"; };
 		4F987B10290690BB004D4250 /* Test_printf.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_printf.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +112,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4F3BC184290591130091FF59 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F718F382A04FC96009E9093 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -127,6 +146,7 @@
 				4F3BC15429055FF50091FF59 /* HelloC */,
 				4F3BC173290560040091FF59 /* Test_C */,
 				4F3BC188290591140091FF59 /* MySecretStaticLibrary */,
+				4F718F3C2A04FC96009E9093 /* TestCHook */,
 				4F3BC15329055FF50091FF59 /* Products */,
 				4F3BC1902905917E0091FF59 /* Frameworks */,
 			);
@@ -138,6 +158,7 @@
 				4F3BC15229055FF50091FF59 /* HelloC.app */,
 				4F3BC172290560040091FF59 /* Test_C.xctest */,
 				4F3BC187290591130091FF59 /* libMySecretStaticLibrary.a */,
+				4F718F3B2A04FC96009E9093 /* TestCHook.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -200,6 +221,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4F718F3C2A04FC96009E9093 /* TestCHook */ = {
+			isa = PBXGroup;
+			children = (
+				4F718F3D2A04FC96009E9093 /* TestCHook.m */,
+				4F718F442A04FCF9009E9093 /* HookNSLog.m */,
+			);
+			path = TestCHook;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -255,6 +285,24 @@
 			productReference = 4F3BC187290591130091FF59 /* libMySecretStaticLibrary.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		4F718F3A2A04FC96009E9093 /* TestCHook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F718F412A04FC96009E9093 /* Build configuration list for PBXNativeTarget "TestCHook" */;
+			buildPhases = (
+				4F718F372A04FC96009E9093 /* Sources */,
+				4F718F382A04FC96009E9093 /* Frameworks */,
+				4F718F392A04FC96009E9093 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F718F402A04FC96009E9093 /* PBXTargetDependency */,
+			);
+			name = TestCHook;
+			productName = TestCHook;
+			productReference = 4F718F3B2A04FC96009E9093 /* TestCHook.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -274,6 +322,9 @@
 					4F3BC186290591130091FF59 = {
 						CreatedOnToolsVersion = 14.0;
 					};
+					4F718F3A2A04FC96009E9093 = {
+						CreatedOnToolsVersion = 14.3;
+					};
 				};
 			};
 			buildConfigurationList = 4F3BC14D29055FF50091FF59 /* Build configuration list for PBXProject "HelloC" */;
@@ -292,6 +343,7 @@
 				4F3BC15129055FF50091FF59 /* HelloC */,
 				4F3BC171290560040091FF59 /* Test_C */,
 				4F3BC186290591130091FF59 /* MySecretStaticLibrary */,
+				4F718F3A2A04FC96009E9093 /* TestCHook */,
 			);
 		};
 /* End PBXProject section */
@@ -308,6 +360,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		4F3BC170290560040091FF59 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F718F392A04FC96009E9093 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -352,6 +411,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4F718F372A04FC96009E9093 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F718F452A04FCF9009E9093 /* HookNSLog.m in Sources */,
+				4F718F3E2A04FC96009E9093 /* TestCHook.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -359,6 +427,11 @@
 			isa = PBXTargetDependency;
 			target = 4F3BC15129055FF50091FF59 /* HelloC */;
 			targetProxy = 4F3BC176290560040091FF59 /* PBXContainerItemProxy */;
+		};
+		4F718F402A04FC96009E9093 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F3BC15129055FF50091FF59 /* HelloC */;
+			targetProxy = 4F718F3F2A04FC96009E9093 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -604,6 +677,36 @@
 			};
 			name = Release;
 		};
+		4F718F422A04FC96009E9093 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wc.TestCHook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4F718F432A04FC96009E9093 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wc.TestCHook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -639,6 +742,15 @@
 			buildConfigurations = (
 				4F3BC18E290591140091FF59 /* Debug */,
 				4F3BC18F290591140091FF59 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F718F412A04FC96009E9093 /* Build configuration list for PBXNativeTarget "TestCHook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F718F422A04FC96009E9093 /* Debug */,
+				4F718F432A04FC96009E9093 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

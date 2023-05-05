@@ -14,6 +14,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>TestCHook.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
@@ -23,6 +28,11 @@
 			<true/>
 		</dict>
 		<key>4F3BC171290560040091FF59</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4F718F3A2A04FC96009E9093</key>
 		<dict>
 			<key>primary</key>
 			<true/>

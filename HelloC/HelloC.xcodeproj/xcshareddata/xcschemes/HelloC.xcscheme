@@ -40,6 +40,17 @@
                ReferencedContainer = "container:HelloC.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "4F718F3A2A04FC96009E9093"
+               BuildableName = "TestCHook.xctest"
+               BlueprintName = "TestCHook"
+               ReferencedContainer = "container:HelloC.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
