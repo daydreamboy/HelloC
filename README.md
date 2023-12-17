@@ -236,6 +236,50 @@ $ nm -m HelloC | grep -e "_add" -e "_sub"
 
 
 
+
+
+### (3) C运行时hook
+
+TODO
+
+http://thomasfinch.me/blog/2015/07/24/Hooking-C-Functions-At-Runtime.html
+
+
+
+### (4) char字面常量，存放多个字符
+
+​      char字面常量，存放多个字符。例如'abc'、'abcd'、'abcde'等。根据赋值的数据类型长度和编译器选择little endian或big endian，决定是从前还是从后选择N个字符，赋值到对应类型的变量中[^16]。
+
+举个例子，如下
+
+```c
+unsigned value;
+char* ptr = (char*)&value;
+
+value = 'ABCD';
+printf("'ABCD' = %02x%02x%02x%02x = %08x\n", ptr[0], ptr[1], ptr[2], ptr[3], value);
+    
+value = 'ABC';
+printf("'ABC'  = %02x%02x%02x%02x = %08x\n", ptr[0], ptr[1], ptr[2], ptr[3], value);
+```
+
+> unsigned类型，即unsigned int类型，可以存放4个char类型
+
+
+
+在MacOS用Xcode编译上面的代码，输出结果，如下
+
+'ABCD' = 44434241 = 41424344    
+'ABC'  = 43424100 = 00414243
+
+
+
+得出如下规则：
+
+由于是little endian，低地址的字节放在word（4个字节）的低位，总是从后到前取最后4个字节的数据，如果不满足4个字节，填充0x00。
+
+
+
 ## 2、char *和char[]
 
 TODO
@@ -355,12 +399,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                                         
+>                                                     
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                                         
+>                                                     
 >        free(ptr);
 >    }
 >    ```
@@ -457,6 +501,12 @@ pthread分为下面几组
 * Read/Write Lock Routines
 * Per-Thread Context Routines
 * Cleanup Routines
+
+说明
+
+> macOS上有关pthread函数的文档，如果在man中没有查询到，可以在下面这个Linux man手册尝试查询
+>
+> https://man7.org/linux/man-pages/index.html
 
 
 
@@ -1341,7 +1391,7 @@ https://gist.github.com/daydreamboy/5b9b961fd4e4174cf4ae957c4fa49b1e
 
 
 
-## 9、时间格式化
+## 9、时间格式化 (strftime函数)
 
 strftime函数的签名，如下
 
@@ -1401,13 +1451,15 @@ strftime函数的conversion specifier，仅支持秒级别，不支持更低的�
 
 
 
+## 附录
+
+### (1) 常用C函数简表
+
+| C函数     | 签名                                     | 作用                                             |
+| --------- | ---------------------------------------- | ------------------------------------------------ |
+| ftruncate | int ftruncate(int fildes, off_t length); | 截取文件内容到指定长度，不足长度则填充到指定长度 |
 
 
-## 10、Linux man手册
-
-macOS上有关pthread函数的文档，如果在man中没有查询到，可以在下面这个Linux man手册尝试查询
-
-https://man7.org/linux/man-pages/index.html
 
 
 
