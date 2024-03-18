@@ -280,6 +280,72 @@ printf("'ABC'  = %02x%02x%02x%02x = %08x\n", ptr[0], ptr[1], ptr[2], ptr[3], val
 
 
 
+### (5) 实现带可变参数列表的函数
+
+* 参数类型一致
+* 参数类型不一致
+* 传递可变参数列表到其他函数
+
+```c
+int variadic_func1 (int count, ...) {
+    printf("variadic_func1 called\n");
+    
+    int arg;
+    int sum = 0;
+
+    va_list ap;
+    va_start(ap, count);
+    for (int i = 0; i < count; ++i) {
+        arg = va_arg(ap, int);
+        sum += arg;
+    }
+    va_end(ap);
+
+    return sum;
+}
+
+static NSString * variadic_func2 (NSString *format, ...) {
+    printf("variadic_func2 called\n");
+    
+    va_list ap;
+    va_start(ap, format);
+    NSString *logMessage = [[NSString alloc] initWithFormat:format arguments:ap];
+    va_end(ap);
+    
+    return logMessage;
+}
+
+void printValues(const char *format, int length, ...)
+{
+    va_list args;
+    va_start(args, length);
+    
+    while (*format != '\0') {
+        if (*format == 'd') {
+            int i = va_arg(args, int);
+            printf("%d\n", i);
+        }
+        else if (*format == 'c') {
+            int c = va_arg(args, int);
+            printf("%c\n", c);
+        }
+        else if (*format == 'f') {
+            double d = va_arg(args, double);
+            printf("%f\n", d);
+        }
+        ++format;
+    }
+    
+    va_end(args);
+}
+```
+
+
+
+
+
+
+
 ## 2、char *和char[]
 
 TODO
@@ -399,12 +465,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                                                     
+>                                                        
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                                                     
+>                                                        
 >        free(ptr);
 >    }
 >    ```
