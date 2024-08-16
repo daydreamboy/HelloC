@@ -25,10 +25,13 @@
 		4F3BC18C290591140091FF59 /* MySecretStaticLibrary.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4F3BC189290591140091FF59 /* MySecretStaticLibrary.h */; };
 		4F3BC1912905917E0091FF59 /* libMySecretStaticLibrary.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F3BC187290591130091FF59 /* libMySecretStaticLibrary.a */; };
 		4F4FA71A294DC01500258637 /* Test_snprintf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F4FA719294DC01500258637 /* Test_snprintf.m */; };
+		4F5A4DBF2BCEA0F200073467 /* Test_keyword_sizeof.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F5A4DBE2BCEA0F200073467 /* Test_keyword_sizeof.m */; };
 		4F6FFB4B2BA00331007D1544 /* Test_keyword__Generic.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6FFB4A2BA00331007D1544 /* Test_keyword__Generic.m */; };
 		4F6FFB4D2BA0050F007D1544 /* Test_strcmp.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6FFB4C2BA0050F007D1544 /* Test_strcmp.m */; };
 		4F718F3E2A04FC96009E9093 /* TestCHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F718F3D2A04FC96009E9093 /* TestCHook.m */; };
 		4F718F452A04FCF9009E9093 /* HookNSLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F718F442A04FCF9009E9093 /* HookNSLog.m */; };
+		4F8140B42C6F4AB200C039D3 /* Test_variadic_function.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F8140B32C6F4AB200C039D3 /* Test_variadic_function.m */; };
+		4F8140B72C6F4F5D00C039D3 /* variadic_parameters_function.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F8140B62C6F4F5D00C039D3 /* variadic_parameters_function.c */; };
 		4F987B11290690BB004D4250 /* Test_printf.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F987B10290690BB004D4250 /* Test_printf.m */; };
 /* End PBXBuildFile section */
 
@@ -91,11 +94,15 @@
 		4F3BC189290591140091FF59 /* MySecretStaticLibrary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MySecretStaticLibrary.h; sourceTree = "<group>"; };
 		4F3BC18A290591140091FF59 /* MySecretStaticLibrary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MySecretStaticLibrary.m; sourceTree = "<group>"; };
 		4F4FA719294DC01500258637 /* Test_snprintf.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_snprintf.m; sourceTree = "<group>"; };
+		4F5A4DBE2BCEA0F200073467 /* Test_keyword_sizeof.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_keyword_sizeof.m; sourceTree = "<group>"; };
 		4F6FFB4A2BA00331007D1544 /* Test_keyword__Generic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_keyword__Generic.m; sourceTree = "<group>"; };
 		4F6FFB4C2BA0050F007D1544 /* Test_strcmp.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_strcmp.m; sourceTree = "<group>"; };
 		4F718F3B2A04FC96009E9093 /* TestCHook.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestCHook.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F718F3D2A04FC96009E9093 /* TestCHook.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestCHook.m; sourceTree = "<group>"; };
 		4F718F442A04FCF9009E9093 /* HookNSLog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HookNSLog.m; sourceTree = "<group>"; };
+		4F8140B32C6F4AB200C039D3 /* Test_variadic_function.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_variadic_function.m; sourceTree = "<group>"; };
+		4F8140B52C6F4F5D00C039D3 /* variadic_parameters_function.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = variadic_parameters_function.h; sourceTree = "<group>"; };
+		4F8140B62C6F4F5D00C039D3 /* variadic_parameters_function.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = variadic_parameters_function.c; sourceTree = "<group>"; };
 		4F987B10290690BB004D4250 /* Test_printf.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Test_printf.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -191,12 +198,16 @@
 				4F374E702951E5B800C48F1E /* Test_File.m */,
 				4F1E9C0A29D5B9EE007892DA /* Test_hook_static_c_function_pseudo.m */,
 				4F6FFB4A2BA00331007D1544 /* Test_keyword__Generic.m */,
+				4F5A4DBE2BCEA0F200073467 /* Test_keyword_sizeof.m */,
 				4F3BC181290590100091FF59 /* Test_Macro.m */,
 				4F987B10290690BB004D4250 /* Test_printf.m */,
 				4F4FA719294DC01500258637 /* Test_snprintf.m */,
 				4F6FFB4C2BA0050F007D1544 /* Test_strcmp.m */,
 				4F3BC17B290560300091FF59 /* Test_time.m */,
 				4F374E6629516BA400C48F1E /* Test_uuid.m */,
+				4F8140B32C6F4AB200C039D3 /* Test_variadic_function.m */,
+				4F8140B52C6F4F5D00C039D3 /* variadic_parameters_function.h */,
+				4F8140B62C6F4F5D00C039D3 /* variadic_parameters_function.c */,
 				4F374E762951E74200C48F1E /* Tools */,
 			);
 			path = Test_C;
@@ -397,10 +408,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F8140B72C6F4F5D00C039D3 /* variadic_parameters_function.c in Sources */,
 				4F6FFB4D2BA0050F007D1544 /* Test_strcmp.m in Sources */,
 				4F3BC182290590100091FF59 /* Test_Macro.m in Sources */,
 				4F1E9C0B29D5B9EE007892DA /* Test_hook_static_c_function_pseudo.m in Sources */,
 				4F4FA71A294DC01500258637 /* Test_snprintf.m in Sources */,
+				4F8140B42C6F4AB200C039D3 /* Test_variadic_function.m in Sources */,
 				4F374E7C2951E87B00C48F1E /* WCApplicationTool.m in Sources */,
 				4F3BC17C290560300091FF59 /* Test_time.m in Sources */,
 				4F987B11290690BB004D4250 /* Test_printf.m in Sources */,
@@ -408,6 +421,7 @@
 				4F6FFB4B2BA00331007D1544 /* Test_keyword__Generic.m in Sources */,
 				4F374E712951E5B800C48F1E /* Test_File.m in Sources */,
 				4F374E792951E75700C48F1E /* WCFileTool.m in Sources */,
+				4F5A4DBF2BCEA0F200073467 /* Test_keyword_sizeof.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -79,7 +79,7 @@ static int add(int a, int b) {
 }
 
 __attribute__((constructor))
-int sub(int a, int b) {
+static int sub(int a, int b) {
     return a - b;
 }
 
@@ -137,7 +137,9 @@ _add:
 
 说明
 
-> 这里的4GB (0x0000000100000000)是MachO文件的起始地址预留的地址空间，64位的MachO文件总是从4GB开始算地址。
+> 1. 这里提到的MachO中的偏移量，是指通过nm或otool命令查看函数在MachO的偏移地址
+>
+> 2. 这里的4GB (0x0000000100000000)是MachO文件的起始地址预留的地址空间，64位的MachO文件总是从4GB开始算地址。
 
 示例如下
 
@@ -156,9 +158,24 @@ _add:
 (lldb) 
 ```
 
-由于lldb不支持十六进制和十进制的混合计算，这里手动先算下4GB的十六进制是0x0000000100000000，而且要转成long，lldb才能计算正确。
+说明
 
-p/x 0x0000000108cc2000 + 0x00000001000021a0 - 0x0000000100000000是按照上面公式得出add函数在内存的地址。可以使用`image lookup -a`或者`p add`，确认这个地址是否正确。
+> 1. 由于lldb不支持十六进制和十进制的混合计算，这里手动先算下4GB的十六进制是0x0000000100000000，而且要转成long，lldb才能计算正确。
+
+这里p/x 0x0000000108cc2000 + 0x00000001000021a0 - 0x0000000100000000是按照上面公式得出add函数在内存的地址。
+
+确认函数地址是否计算正确，有下面几种方式
+
+* 可以使用`image lookup -a`
+
+* 直接打印函数名，例如`p add`
+
+* 代码中打印函数地址，如下
+
+  ```c
+  NSLog(@"%p", add);
+  ```
+
 
 说明
 
@@ -166,7 +183,9 @@ p/x 0x0000000108cc2000 + 0x00000001000021a0 - 0x0000000100000000是按照上面�
 
 
 
-在Release模式下，实际上在lldb中是不能看到add函数，但是可以看到sub函数，如下
+#### a. 在Release编译模式下查看静态C函数地址
+
+在Release编译模式下，实际上在lldb中是不能看到add函数，但是可以看到sub函数，如下
 
 ```shell
 (lldb) p add
@@ -178,19 +197,15 @@ add
 (int (*)(int, int)) $0 = 0x0000000104cf3320 (HelloC`sub at main.m:16)
 ```
 
-区分在于两个函数是静态函数和静态构造函数，静态构造函数需要让系统调用，因此符号是对外可见的。
+区分在于两个函数是静态函数和静态构造函数，构造函数需要让静态系统调用，因此符号是对外可见的。
 
-为了确认计算add函数是对的，修改代码，直接将add函数的地址打印出来。
+注意
 
-```c
-NSLog(@"%p", add);
-```
+> 在Xcode15.4版本的lldb中，已经可以查看静态函数add的地址，可能调整调试的策略。
 
 
 
-#### a. 在Release模式下查看静态C函数地址
-
-由于采用Release模式编译，可执行文件输出路径也变了，需要重新查看下`_add`和`_sub`符号的地址，如下
+由于采用Release模式编译，可执行文件可能重新编译，需要重新查看下`_add`和`_sub`符号的地址，如下
 
 ```shell
 $ nm -m HelloC | grep -e "_add" -e "_sub"
@@ -201,7 +216,6 @@ $ nm -m HelloC | grep -e "_add" -e "_sub"
 在lldb中重新计算，如下
 
 ```shell
-2023-04-16 16:41:44.375528+0800 HelloC[11263:140934] 0x102e4e3ab
 (lldb) image list HelloC
 [  0] 9E660F80-3347-38CD-AFB2-6501E4FD1238 0x0000000102e4c000 /Users/wesley_chen/Library/Developer/Xcode/DerivedData/HelloC-gclmwhthurqacjadtcsryagjoeib/Build/Products/Release-iphonesimulator/HelloC.app/HelloC 
       /Users/wesley_chen/Library/Developer/Xcode/DerivedData/HelloC-gclmwhthurqacjadtcsryagjoeib/Build/Products/Release-iphonesimulator/HelloC.app.dSYM/Contents/Resources/DWARF/HelloC
@@ -284,9 +298,14 @@ printf("'ABC'  = %02x%02x%02x%02x = %08x\n", ptr[0], ptr[1], ptr[2], ptr[3], val
 
 * 参数类型一致
 * 参数类型不一致
-* 传递可变参数列表到其他函数
+* 传递可变参数列表到其他函数（C、Objective-C等）
+
+举个例子，如下
 
 ```c
+#include <stdarg.h>
+
+// 参数类型一致
 int variadic_func1 (int count, ...) {
     printf("variadic_func1 called\n");
     
@@ -304,17 +323,7 @@ int variadic_func1 (int count, ...) {
     return sum;
 }
 
-static NSString * variadic_func2 (NSString *format, ...) {
-    printf("variadic_func2 called\n");
-    
-    va_list ap;
-    va_start(ap, format);
-    NSString *logMessage = [[NSString alloc] initWithFormat:format arguments:ap];
-    va_end(ap);
-    
-    return logMessage;
-}
-
+// 参数类型不一致
 void printValues(const char *format, int length, ...)
 {
     va_list args;
@@ -337,6 +346,42 @@ void printValues(const char *format, int length, ...)
     }
     
     va_end(args);
+}
+
+// 传递可变参数列表到其他函数
+char * variadic_func2 (char *format, ...) {
+    printf("variadic_func2 called\n");
+    
+    va_list args1;
+    va_start(args1, format);
+    va_list args2;
+    va_copy(args2, args1);
+    
+    // Note: make one more byte for '\0'
+    size_t bufferSize = 1 + vsnprintf(NULL, 0, format, args1);
+    char *buffer = (char *)malloc(bufferSize);
+    va_end(args1);
+    vsnprintf(buffer, bufferSize, format, args2);
+    va_end(args2);
+    
+    return buffer;
+}
+```
+
+
+
+传递可变参数列表到Objective-C方法，如下
+
+```objective-c
+static NSString * variadic_func3 (NSString *format, ...) {
+    printf("variadic_func3 called\n");
+    
+    va_list ap;
+    va_start(ap, format);
+    NSString *logMessage = [[NSString alloc] initWithFormat:format arguments:ap];
+    va_end(ap);
+    
+    return logMessage;
 }
 ```
 
@@ -465,12 +510,12 @@ void * calloc(size_t count, size_t size);
 >    - (void)test_calloc_initialized_with_zero {
 >        int count = 10;
 >        int *ptr = (int *)calloc(count, sizeof(int));
->                                                        
+>                                                           
 >        for (int i = 0; i < count; ++i) {
 >            printf("%d ", ptr[i]);
 >        }
 >        printf("\n");
->                                                        
+>                                                           
 >        free(ptr);
 >    }
 >    ```

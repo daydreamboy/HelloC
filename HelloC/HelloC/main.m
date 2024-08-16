@@ -24,8 +24,8 @@ int main(int argc, char * argv[]) {
         appDelegateClassName = NSStringFromClass([AppDelegate class]);
     }
     
-    int r = add(1, 2);
-    NSLog(@"%p", add);
+    __unused int r = add(1, 2);
+    NSLog(@"add func address: %p", add);
 
     return UIApplicationMain(argc, argv, nil, appDelegateClassName);
 }
