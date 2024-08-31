@@ -10,6 +10,7 @@
 		4F02CFC12C83480E005E3642 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F02CFC02C83480E005E3642 /* main.c */; };
 		4F02CFCE2C83485C005E3642 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F02CFCD2C83485C005E3642 /* main.c */; };
 		4F02CFD92C83486F005E3642 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F02CFD82C83486F005E3642 /* main.c */; };
+		4F02CFE42C8359D7005E3642 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 4F02CFE32C8359D7005E3642 /* main.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +41,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		4F02CFDF2C8359D7005E3642 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +59,8 @@
 		4F02CFCD2C83485C005E3642 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		4F02CFD62C83486F005E3642 /* traced_helloworld */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = traced_helloworld; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F02CFD82C83486F005E3642 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		4F02CFE12C8359D7005E3642 /* trace_pid */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = trace_pid; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F02CFE32C8359D7005E3642 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +85,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4F02CFDE2C8359D7005E3642 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -82,6 +101,7 @@
 				4F02CFBF2C83480E005E3642 /* HelloPtrace */,
 				4F02CFCC2C83485C005E3642 /* simple_tracer */,
 				4F02CFD72C83486F005E3642 /* traced_helloworld */,
+				4F02CFE22C8359D7005E3642 /* trace_pid */,
 				4F02CFBE2C83480E005E3642 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -92,6 +112,7 @@
 				4F02CFBD2C83480E005E3642 /* HelloPtrace */,
 				4F02CFCB2C83485C005E3642 /* simple_tracer */,
 				4F02CFD62C83486F005E3642 /* traced_helloworld */,
+				4F02CFE12C8359D7005E3642 /* trace_pid */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,6 +139,14 @@
 				4F02CFD82C83486F005E3642 /* main.c */,
 			);
 			path = traced_helloworld;
+			sourceTree = "<group>";
+		};
+		4F02CFE22C8359D7005E3642 /* trace_pid */ = {
+			isa = PBXGroup;
+			children = (
+				4F02CFE32C8359D7005E3642 /* main.c */,
+			);
+			path = trace_pid;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -174,6 +203,23 @@
 			productReference = 4F02CFD62C83486F005E3642 /* traced_helloworld */;
 			productType = "com.apple.product-type.tool";
 		};
+		4F02CFE02C8359D7005E3642 /* trace_pid */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F02CFE52C8359D7005E3642 /* Build configuration list for PBXNativeTarget "trace_pid" */;
+			buildPhases = (
+				4F02CFDD2C8359D7005E3642 /* Sources */,
+				4F02CFDE2C8359D7005E3642 /* Frameworks */,
+				4F02CFDF2C8359D7005E3642 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = trace_pid;
+			productName = trace_pid;
+			productReference = 4F02CFE12C8359D7005E3642 /* trace_pid */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -190,6 +236,9 @@
 						CreatedOnToolsVersion = 15.4;
 					};
 					4F02CFD52C83486F005E3642 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					4F02CFE02C8359D7005E3642 = {
 						CreatedOnToolsVersion = 15.4;
 					};
 				};
@@ -210,6 +259,7 @@
 				4F02CFBC2C83480E005E3642 /* HelloPtrace */,
 				4F02CFCA2C83485C005E3642 /* simple_tracer */,
 				4F02CFD52C83486F005E3642 /* traced_helloworld */,
+				4F02CFE02C8359D7005E3642 /* trace_pid */,
 			);
 		};
 /* End PBXProject section */
@@ -236,6 +286,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F02CFD92C83486F005E3642 /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F02CFDD2C8359D7005E3642 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F02CFE42C8359D7005E3642 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +463,24 @@
 			};
 			name = Release;
 		};
+		4F02CFE62C8359D7005E3642 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4F02CFE72C8359D7005E3642 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -440,6 +516,15 @@
 			buildConfigurations = (
 				4F02CFDB2C83486F005E3642 /* Debug */,
 				4F02CFDC2C83486F005E3642 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4F02CFE52C8359D7005E3642 /* Build configuration list for PBXNativeTarget "trace_pid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F02CFE62C8359D7005E3642 /* Debug */,
+				4F02CFE72C8359D7005E3642 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
