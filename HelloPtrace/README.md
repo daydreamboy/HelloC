@@ -134,3 +134,6 @@ void functionWithPtrace() {
 
 
 
+TODO:
+
+https://www.spaceflint.com/?p=150
